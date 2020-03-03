@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Matthias Valvekens</title>
+        <link rel="stylesheet" href="/static/css/bulma.min.css">
+        <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
+        <style>
+            * { box-shadow: none !important; }
+            html {
+                height: 100vh;
+                width: 100vw;
+            }
+            body {
+                height: 100vh;
+                width: 100vw;
+            }
+
+            .columns {
+                height: 100%;
+            }
+
+            div.is-widescreen {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            #name {
+                max-width: 10ch;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+        <script lang="text/javascript">
+            function toggleTabNav(obj) {
+                let tabs = document.getElementById('nav-tabs');
+                let allTabs = tabs.getElementsByClassName('is-active');
+                Array.prototype.forEach.call(allTabs, function(tab) {
+                        tab.classList.remove('is-active');
+                    }
+                );
+                let targetTab = obj.getAttribute('data-tab-nav');
+                obj.parentNode.classList.add('is-active');
+                let targetObj = document.getElementById('tab-' + targetTab);
+
+                let tabview = document.getElementById('tabview');
+                let allTabContents = tabview.getElementsByClassName('content-tab')
+                    Array.prototype.forEach.call(allTabContents, function(tab) {
+                        tab.classList.add('is-hidden');
+                    }
+                );
+                targetObj.classList.remove('is-hidden');
+            }
+        </script>
+    </head>
+    <body>
+        <section class="section transparent is-paddingless is-marginless">
+            <div class="container is-widescreen is-marginless is-centered">
+                <div class="columns">
+                    <div class="column is-6 shadowless is-paddingless is-gapless" style="margin-top: 0; margin-bottom: 0;">
+                        <figure class="image is-square transparent">
+                            <img src="/static/mfo-picture.jpg" alt="Matthias@Oberwolfach, 2019">
+                        </figure>
+                    </div>
+
+                    <div class="column is-5 is-offset-1" id="tabview">
+                        <nav class="tabs">
+                            <ul id="nav-tabs">
+                                <li class="is-active">
+                                    <a data-tab-nav="home" onclick="toggleTabNav(this)">Home</a>
+                                </li>
+                                <li>
+                                    <a data-tab-nav="about-me" onclick="toggleTabNav(this)">About me</a>
+                                </li>
+                                <li>
+                                    <a data-tab-nav="publications" onclick="toggleTabNav(this)">Publications</a> 
+                                </li>
+                                <li>
+                                    <a data-tab-nav="contact-me" onclick="toggleTabNav(this)">Contact me</a> 
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="content-tab box transparent" id="tab-home">
+                            <h1 class="title is-1 has-text-centered has-text-black-ter is-family-secondary" id="name">
+                                Matthias Valvekens </h1>
+                            <h2 class="subtitle is-6 has-text-centered has-text-grey has-text-weight-light">
+                                Mathematician<br>Software developer
+                            </h2>
+                            <figure class="image is-128x128" style="margin-left: auto; margin-right: auto;">
+                                <img class="is-rounded has-background-white" style="border-width: thin; border-color: #ccc; border-style: solid;" src="/static/tegaki-matthias-128.png">
+                            </figure>
+                            <div class="box has-text-centered" style="margin-bottom: 0.5rem;">
+                                <span class="icon">
+                                    <a href="https://www.linkedin.com/in/matthias-valvekens-146932a2"><span class="fab fa-linkedin-in"></span></a>
+                                </span>
+                                <span class="icon">
+                                    <a href="https://github.com/MatthiasValvekens"><span class="fab fa-github"></span></a>
+                                </span>
+                            </div>
+                            <div class="box is-size-7">
+                                <h3 class="is-6 has-text-centered has-text-grey has-text-weight-light" style="margin-top: 1rem;">
+                                    Photo credit
+                                </h3>
+                                <p class="has-text-centered">
+                                    
+                                    &#xA9; Archives of the Mathematisches Forschungsinstitut Oberwolfach
+                                </p>
+                            </div>
+                        </div>
+                        <div class="content-tab box transparent is-hidden" id="tab-about-me">
+                            <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
+                                Current status
+                            </h2>
+                            <p style="margin-bottom: 2rem;">
+                            I'm currently a PhD student at KU Leuven, under the supervision of <a href="https://perswww.kuleuven.be/~u0018768/index.html">prof. Stefaan Vaes</a>.
+                            My research centres around the representation theory of rigid C<sup>*</sup>-tensor categories, subfactor theory and quantum groups.
+                            </p>
+                            <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
+                                Technical skillset
+                            </h2>
+                            <p>
+                                My side projects over the past few years have mostly involved Python and Django.
+                                I'm pretty confident that I can handle whatever Django problem you throw at me, from architectural design through coding all the way to deployment and administration.
+                            </p>
+                            <p style="margin-bottom: 2rem;">
+                                I also have extensive experience with the Java ecosystem (including a couple of internships), and I've dabbled in Haskell for a while to run combinatorial experiments for my mathematical research.
+                            </p>
+                            <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
+                                Miscellanea
+                            </h2>
+                            <p>
+                                I speak Dutch, English, Japanese and French, and I'm involved with several choirs in and around Leuven.
+                            </p>
+                        </div>
+                        <div class="content-tab box transparent is-hidden" id="tab-publications">
+                            <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
+                                Research articles
+                            </h2>
+                            <ol>
+                                <li>
+                                    D. Kyed, S. Raum, S. Vaes, and M. Valvekens, <em>L<sup>2</sup>-Betti numbers of rigid C<sup>*</sup>-tensor categories and discrete quantum groups</em>, Analysis &amp; PDE <b>10</b> (2017), no. 7, 1757&ndash;1791.
+                                    <a href="https://arxiv.org/abs/1701.06447" target="_blank">arXiv:1701.06447</a>
+                                </li>
+                                <li>
+                                    S. Vaes and M. Valvekens, <em>Property (T) discrete quantum groups and subfactors with triangle presentations</em>, Advances in Mathematics <b>345</b> (2019), 382&ndash;428.
+                                    <a href="https://arxiv.org/abs/1804.04006" target="_blank">arXiv:1804.04006</a>
+                                </li>
+                                <li>
+                                    M. Valvekens, <em>L<sup>2</sup>-Betti numbers for rigid C<sup>*</sup>-tensor categories associated with totally disconnected groups</em>, preprint. <a href="https://arxiv.org/abs/2001.10757" target="_blank">arXiv:2001.10757</a>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="content-tab box transparent is-hidden" id="tab-contact-me">
+                            <div class="box is-size-7 has-text-centered">
+                                <a class="button is-rounded has-text-grey" href="/static/&#x76;&#x63;&#x61;&#x72;&#x64;&#x2E;&#x76;&#x63;&#x66;" style="margin-bottom: 2rem;">
+                                    <span class="fas fa-address-card" style="margin-right: 0.5rem;"></span> My vCard
+                                </a>
+                                <h3 class="is-6 has-text-centered has-text-grey has-text-weight-light">
+                                    My email address
+                                </h3>
+                                <p class="has-text-centered" style="margin-bottom: 1rem;">
+                                <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;matthias&#x40;&#x6D;&#x76;&#x61;&#x6C;&#x76;&#x65;&#x6B;&#x65;&#x6E;&#x73;&#x2E;&#x62;&#x65;">matthias&#x40;&#x6D;&#x76;&#x61;&#x6C;&#x76;&#x65;&#x6B;&#x65;&#x6E;&#x73;&#x2E;&#x62;&#x65;</a>
+                                </p>
+                                <h3 class="is-6 has-text-centered has-text-grey has-text-weight-light">
+                                    My PGP key fingerprint
+                                </h3> 
+                                <p class="has-text-centered" style="margin-bottom: 2rem;">
+                                C474 1E2A CFD6 9911 13A2<br>
+                                A87B 4399 208B 3C51 1A9B
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

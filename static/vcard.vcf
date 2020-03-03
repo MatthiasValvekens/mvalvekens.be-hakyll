@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+PHOTO;MEDIATYPE=image/jpeg:https://mvalvekens.be/photo.jpg
+N:Valvekens;Matthias
+FN:Matthias Valvekens
+ORG:KU Leuven
+TITLE:PhD researcher
+TEL;CELL:+32 474 259 183
+EMAIL;WORK;INTERNET:matthias@mvalvekens.be
+URL:mvalvekens.be
+REV:2020-03-03T10:00:00Z
+END:VCARD
