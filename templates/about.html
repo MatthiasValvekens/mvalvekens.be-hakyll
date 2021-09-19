@@ -1,12 +1,12 @@
 $for(about-sections)$
 <section class="section">
     <div class="container">
-        <h2 class="subtitle has-text-centered">
-            <span class="fas $icon$" style="font-weight: 900; margin-right: 1em;"></span>
+        <h1 class="subtitle has-text-centered">
+            <span class="fas $icon$" style="font-weight: 900; margin-right: 1em;" aria-hidden="true"></span>
             $if(label)$
             <a class="has-text-dark" name="$label$" href="#$label$">$title$</a>
             $else$ $title$ $endif$
-        </h2>
+        </h1>
         <div class="box">
             $body$
         </div>

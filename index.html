@@ -32,7 +32,7 @@
                 margin-right: auto;
             }
         </style>
-        <script lang="text/javascript">
+        <script>
             function toggleTabNav(obj) {
                 let tabs = document.getElementById('nav-tabs');
                 let allTabs = tabs.getElementsByClassName('is-active');
@@ -84,22 +84,22 @@
                         <div class="content-tab box transparent" id="tab-home">
                             <h1 class="title is-1 has-text-centered has-text-black-ter is-family-secondary" id="name">
                                 Matthias Valvekens </h1>
-                            <h2 class="subtitle is-6 has-text-centered has-text-grey has-text-weight-light">
+                            <h2 class="subtitle is-6 has-text-centered has-text-weight-light">
                                 Mathematician<br>Software developer
                             </h2>
                             <figure class="image is-128x128" style="margin-left: auto; margin-right: auto;">
-                                <img class="is-rounded has-background-white" style="border-width: thin; border-color: #ccc; border-style: solid;" src="/static/images/tegaki-matthias-128.png">
+                                <img class="is-rounded has-background-white" style="border-width: thin; border-color: #ccc; border-style: solid;" src="/static/images/tegaki-matthias-128.png" alt="hand-drawn profile picture">
                             </figure>
                             <div class="box has-text-centered" style="margin-bottom: 0.5rem;">
                                 <span class="icon">
-                                    <a href="https://www.linkedin.com/in/matthias-valvekens-146932a2"><span class="fab fa-linkedin-in"></span></a>
+                                    <a href="https://www.linkedin.com/in/matthias-valvekens-146932a2" aria-label="LinkedIn profile"><span class="fab fa-linkedin-in"></span></a>
                                 </span>
                                 <span class="icon">
-                                    <a href="https://github.com/MatthiasValvekens"><span class="fab fa-github"></span></a>
+                                    <a href="https://github.com/MatthiasValvekens" aria-label="GitHub profile"><span class="fab fa-github"></span></a>
                                 </span>
                             </div>
                             <div class="box is-size-7">
-                                <h3 class="is-6 has-text-centered has-text-grey has-text-weight-light" style="margin-top: 1rem;">
+                                <h3 class="is-6 has-text-centered has-text-weight-light" style="margin-top: 1rem;">
                                     Photo credit
                                 </h3>
                                 <p class="has-text-centered">
@@ -109,10 +109,12 @@
                             </div>
                         </div>
                         <div class="content-tab box transparent is-hidden" id="tab-about-me">
-
+                            <h1 class="subtitle is-5 has-text-centered">
+                                Summary
+                            </h1>
                             <div class="box is-shadowless has-text-centered">
-                                <a class="button is-rounded has-text-grey" href="/about.html" style="margin-bottom: 2rem;">
-                                    Click for long-form version
+                                <a class="button is-rounded" href="/about.html" style="margin-bottom: 2rem;">
+                                    Long-form version
                                 </a>
                             </div>
                             <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
@@ -165,8 +167,8 @@
                                     <a href="https://arxiv.org/abs/2001.10757" target="_blank">arXiv:2001.10757</a>
                                 </li>
                             </ol>
-                            <p class="has-text-centered has-text-grey" style="margin-top: 1rem;">
-                                See <a href="/about.html#research">here</a> for a more complete list.
+                            <p class="has-text-centered" style="margin-top: 1rem;">
+                                For a more complete list of my mathematical work, see <a href="/about.html#research">Mathematical writings</a>.
                             </p>
                         </div>
                         <div class="content-tab box transparent is-hidden" id="tab-contact-me">
