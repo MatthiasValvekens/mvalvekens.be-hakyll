@@ -14,7 +14,7 @@ unminifiedCss :: Pattern
 unminifiedCss = "static/css/*" .&&. complement "static/css/*.min.css"
 
 simpleStaticAssets :: Pattern
-simpleStaticAssets = "static/**" .&&. complement unminifiedCss
+simpleStaticAssets = ("static/**" .&&. complement unminifiedCss) .||. "robots.txt"
 
 main :: IO ()
 main = hakyll $ do
