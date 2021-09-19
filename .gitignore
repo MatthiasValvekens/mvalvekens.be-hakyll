@@ -34,3 +34,4 @@ scratchpad
 *.sw*
 _cache/
 _site/
+deploy.sh
