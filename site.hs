@@ -30,8 +30,6 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    -- TODO put publication list in markdown
-    -- TODO rewrite index using more robust templating logic?
     match "index.html" $ do
         route idRoute
         compile $ do
@@ -73,7 +71,6 @@ main = hakyll $ do
     create ["sitemap.xml"] $ do
         route idRoute
         compile $ do
-            -- TODO add blog posts here too, once I have some of them
             posts <- recentFirst =<< loadAll "blog/*"
             specialPages <- loadAll (fromList ["about.html", "contact.html"])
             let pages = specialPages ++ posts
