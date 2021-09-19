@@ -1,0 +1,43 @@
+---
+title: "Side projects"
+icon: fa-project-diagram
+label: projects
+order: 3
+---
+
+<ul>
+    <li style="margin-bottom: 1em;">
+        <a href="https://github.com/MatthiasValvekens/pyHanko"><b><tt>pyHanko</tt></b></a> <br>
+        Sign PDFs using Python. Includes support for PKCS11 devices in general, and the Belgian eID in particular. PyHanko also deals with all baseline PAdES profiles.
+        This project is currently in alpha.
+    </li>
+    <li style="margin-bottom: 1em;">
+        <a href="https://github.com/MatthiasValvekens/certomancer"><b><tt>certomancer</tt></b></a> <br>
+        Quickly construct, mock and deploy PKI test configurations using simple, declarative YAML config.
+        Includes integrated CRL, OCSP and time stamping service provisioning.
+        Certomancer provides a standalone WSGI application with minimal setup requirements, and also integrates with <tt>requests-mock</tt>.
+        This tool is heavily used in pyHanko's test suite.
+    </li>
+    <li style="margin-bottom: 1em;">
+        <a href="https://github.com/MatthiasValvekens/django-webauth"><b><tt>django-webauth</tt></b></a> <br>
+        Django reusable app that provides a collection of utilities on top of Django's standard <tt>django.contrib.auth</tt> package and <tt>django-otp</tt>. 
+        The feature set includes a minimal user model, support for token-based authentication, a simple and relatively boilerplate-free way to define JSON APIs with pluggable authentication workflows, and a flexible template-based multilingual mail broadcast mechanism.
+    </li>
+    <li style="margin-bottom: 1em;">
+        <a href="https://github.com/MatthiasValvekens/django-double-entry"><b><tt>django-double-entry</tt></b></a> <br>
+        Django reusable app to provide support for basic double-entry bookkeeping in the Django ORM.
+        It also implements a highly customisable transaction processing API (implemented via <a href="https://github.com/MatthiasValvekens/django-webauth"><tt>django-webauth</tt></a>).
+        The code is well-tested and has been running in production systems for about two years now.
+    </li>
+    <li style="margin-bottom: 1em;">
+        <a href="https://github.com/MatthiasValvekens/django-partial-state"><b><tt>django-partial-state</tt></b></a> <br>
+        Support for transparent handling of incomplete objects in the Django ORM.
+    </li>
+    <li style="margin-bottom: 1em;">
+        <a href="https://github.com/MatthiasValvekens/boggle"><b>Boggle</b></a> <br>
+        A fairly basic Boggle clone with a Bulma-based user interface and a server running on top of Flask. Communication between client and server happens through a very simple JSON API.
+        Goal: provide some responsible family entertainment during the coronavirus crisis.
+        You can play around with it <a href="/boggle/">here</a>.
+    </li>
+</ul>
+

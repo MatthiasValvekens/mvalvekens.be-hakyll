@@ -1,0 +1,16 @@
+BEGIN:VCARD
+VERSION:3.0
+PHOTO;MEDIATYPE=image/jpeg:https://mvalvekens.be/photo.jpg
+N:Valvekens;Matthias
+FN:Matthias Valvekens
+ORG:iText Group NV
+TITLE:Research Engineer
+TEL;TYPE=cell,voice,msg:+32 474 259 183
+ADR;TYPE=work,postal,parcel,intl:;AA Tower;
+ Technologiepark-Zwijnaarde 122;Zwijnaarde;Oost-Vlaanderen;
+ 9052;Belgium
+EMAIL;TYPE=internet,pref:matthias@mvalvekens.be
+EMAIL;TYPE=internet,work:matthias.valvekens@itextpdf.com
+URL:mvalvekens.be
+REV:2021-09-19T10:00:00Z
+END:VCARD
