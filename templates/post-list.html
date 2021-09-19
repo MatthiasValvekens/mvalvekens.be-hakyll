@@ -1,7 +1,9 @@
-<ul>
-    $for(posts)$
-        <li>
-            <a href="$url$">$title$</a> - $date$
-        </li>
-    $endfor$
-</ul>
+<div class="container">
+    <ul class="has-text-centered">
+        $for(posts)$
+            <li>
+                <a href="$url$">$title$</a> ($date$)
+            </li>
+        $endfor$
+    </ul>
+</div>

@@ -1,0 +1,15 @@
+<h1 class="title has-text-centered">Blog entries tagged "$tag$"</h1>
+<div class="container">
+    <section class="section">
+        <h2 class="is-5 subtitle has-text-centered">Summary</h2>
+        $if(tag-summary)$
+            $tag-summary$
+        $else$
+            <p class="has-text-centered">No summary available.</p>
+        $endif$
+    </section>
+    <section class="section has-text-centered">
+        <h2 class="is-5 subtitle">List of entries</h2>
+        $partial("templates/post-list.html")$
+    </section>
+</div>
