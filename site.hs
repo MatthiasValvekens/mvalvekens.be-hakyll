@@ -63,6 +63,16 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" aboutCtx
                 >>= relativizeUrls
 
+    -- Loosely based on https://robertwpearce.com/hakyll-pt-2-generating-a-sitemap-xml-file.html
+    create ["sitemap.xml"] $ do
+        route idRoute
+        compile $ do
+            -- TODO add blog posts here too, once I have some of them
+            specialPages <- loadAll (fromList ["about.html", "contact.html"])
+            let rootCtx = constField "rootUrl" rootUrl
+            let pgCtx = listField "pages" (rootCtx <> defaultContext) (return specialPages) 
+            makeItem "" >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
+
 
     match "templates/*" $ compile templateBodyCompiler
     match "snippets/contact-info.html" $ compile getResourceBody
@@ -70,11 +80,9 @@ main = hakyll $ do
 
 
 --------------------------------------------------------------------------------
-postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
 
+rootUrl :: String
+rootUrl = "https://mvalvekens.be"
 
 iconContext :: Context a
 iconContext = field "icon" $ \item -> do
