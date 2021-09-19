@@ -27,25 +27,23 @@ main = hakyll $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            let indexCtx = contactInfoCtx <> defaultContext
             getResourceBody
-                >>= applyAsTemplate indexCtx
+                >>= applyAsTemplate (snippetField <> defaultContext)
                 >>= relativizeUrls
 
     match unminifiedCss $ do
-        route   idRoute
+        route idRoute
         compile compressCssCompiler
 
     create ["contact.html"] $ do
         route idRoute
         compile $ do
-            let ctx = constField "title" "Contact" <> defaultContext 
+            let ctx = constField "title" "Contact me" <> defaultContext 
 
             body <- loadBody "snippets/contact-info.html"
             makeItem body
                 >>= loadAndApplyTemplate "templates/default.html" ctx
-                >>= relativizeUrls
-        
+                >>= relativizeUrls 
 
     create ["about.html"] $ do
         route idRoute
@@ -75,8 +73,9 @@ main = hakyll $ do
 
 
     match "templates/*" $ compile templateBodyCompiler
-    match "snippets/contact-info.html" $ compile getResourceBody
-    match "about/*" $ compile getResourceBody
+    match "snippets/*" $ compile getResourceBody
+    match "about/*" $ compile $ do
+        getResourceBody >>= applyAsTemplate snippetField
 
 
 --------------------------------------------------------------------------------
@@ -93,10 +92,6 @@ labelContext :: Context a
 labelContext = field "label" $ \item -> do
     metadata <- getMetadata (itemIdentifier item)
     return $ fromMaybe "" $ lookupString "label" metadata
-
-contactInfoCtx :: Context String
-contactInfoCtx = field "contact" (const $ loadBody "snippets/contact-info.html")
-
 
 sortByMetadata :: (MonadMetadata m, MonadFail m) => String -> [Item a] -> m [Item a]
 sortByMetadata theMeta = sortByM $ extract . itemIdentifier
