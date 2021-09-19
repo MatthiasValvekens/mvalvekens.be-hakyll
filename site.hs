@@ -71,7 +71,7 @@ main = hakyll $ do
     create ["sitemap.xml"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "blog/*"
+            posts <- recentFirst =<< loadAll "blog/**"
             specialPages <- loadAll (fromList ["about.html", "contact.html"])
             let pages = specialPages ++ posts
             let rootCtx = constField "rootUrl" rootUrl
@@ -79,7 +79,7 @@ main = hakyll $ do
             makeItem "" >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
 
     -- Build tags and tag summary pages
-    tags <- buildTags "blog/*" (fromCapture "tags/*.html")
+    tags <- buildTags "blog/**" (fromCapture "tags/*.html")
     -- these templates contain just the summary text; they're optional and not routed
     match "tag-summaries/*.md" $ compile pandocCompiler
     -- this generates the actual tag summary pages
@@ -103,7 +103,7 @@ main = hakyll $ do
     match "blog.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "blog/*"
+            posts <- recentFirst =<< loadAll "blog/**"
             let ctx = listField "posts" (postCtx tags) (return posts)
                     <> defaultContext
             getResourceBody
@@ -111,8 +111,7 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
 
-    -- TODO set up routes to group posts by year
-    match "blog/*" $ do
+    match "blog/**" $ do
         route $ setExtension "html"
         compile $ pandocBlogPostCompiler
             >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
