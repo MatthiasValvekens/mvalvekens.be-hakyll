@@ -24,7 +24,7 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #777777;
+    color: #555555;
      border-right: 1px dotted #aaaaaa; 
   }
 pre.numberSource { padding-left: 3em; }
