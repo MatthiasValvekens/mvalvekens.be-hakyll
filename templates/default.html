@@ -6,6 +6,7 @@
         <title>Matthias Valvekens &ndash; $title$</title>
         <link rel="stylesheet" href="/static/css/bulma.min.css">
         <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="/static/css/blog.css">
         <!-- see /static/css/LICENSE.syntax -->
         <link rel="stylesheet" href="/static/css/syntax.css">
         <script src="/static/js/website-nav.js"></script>
@@ -29,15 +30,14 @@
                         <a class="navbar-item" href="/">
                             Home
                         </a>
-
                         <a class="navbar-item" href="/about.html">
                             About Me
                         </a>
-                        <a class="navbar-item" href="/contact.html">
-                            Contact
-                        </a>
                         <a class="navbar-item" href="/blog.html">
                             Blog
+                        </a>
+                        <a class="navbar-item" href="/contact.html">
+                            Contact
                         </a>
                     </div>
                 </div>
@@ -46,5 +46,8 @@
         <main role="main">
             $body$
         </main>
+        <footer class="footer has-text-centered is-size-7">
+            $partial("templates/copyright.html")$
+        </footer>
     </body>
 </html>

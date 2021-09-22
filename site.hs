@@ -5,12 +5,22 @@ import Hakyll
 
 import Text.Pandoc.Definition
 import Text.Pandoc.Walk (walkPandocM)
+import Text.Pandoc 
+    ( Extension (..)
+    , ReaderOptions (..)
+    , enableExtension )
+import qualified Text.Pandoc as Pandoc
+import qualified Text.Pandoc.Citeproc as Pandoc (processCitations)
+import Hakyll.Core.Compiler.Internal (compilerThrow)
 
 import Data.Monoid (mappend)
 import Data.Ord (comparing)
 import Data.List (sortBy)
 import Data.Maybe (fromMaybe)
+import qualified Data.Map as Map
+import qualified Data.Time as Time
 import qualified Data.Text as T
+import qualified Data.ByteString as BS
 
 import Control.Monad (liftM)
 import Control.Monad.Identity (runIdentity)
@@ -44,7 +54,9 @@ main = hakyll $ do
     create ["contact.html"] $ do
         route idRoute
         compile $ do
-            let ctx = constField "title" "Contact me" <> defaultContext 
+            let ctx = constField "title" "Contact me" 
+                    <> copyrightContext
+                    <> defaultContext 
 
             body <- loadBody "snippets/contact-info.html"
             makeItem body
@@ -60,6 +72,7 @@ main = hakyll $ do
             let aboutCtx 
                     = listField "about-sections" aboutSecCtx (return sections)
                     <> constField "title" "About Me"
+                    <> copyrightContext
                     <> defaultContext
 
             makeItem ""
@@ -93,6 +106,7 @@ main = hakyll $ do
                     -- read summary
                     <> field "tag-summary" (const $ loadBody tagSummary)
                     <> listField "posts" (postCtx tags) (return posts)
+                    <> copyrightContext
                     <> defaultContext
 
             makeItem ""
@@ -105,6 +119,7 @@ main = hakyll $ do
         compile $ do
             posts <- recentFirst =<< loadAll "blog/**"
             let ctx = listField "posts" (postCtx tags) (return posts)
+                    <> copyrightContext
                     <> defaultContext
             getResourceBody
                 >>= applyAsTemplate ctx
@@ -113,16 +128,21 @@ main = hakyll $ do
 
     match "blog/**" $ do
         route $ setExtension "html"
+        let ctx = postCtx tags
         compile $ pandocBlogPostCompiler
-            >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
-            >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
+            >>= loadAndApplyTemplate "templates/post.html" ctx 
+            >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
-    match "snippets/*" $ compile getResourceBody
+    match "snippets/**" $ compile getResourceBody
     match "tag-summaries/*" $ compile getResourceBody
     match "about/*" $ compile $ do
         getResourceBody >>= applyAsTemplate snippetField
+    match "biblio/*.csl" $ compile cslCompiler
+    match "biblio/*.csl" $ version "biblio-publish" $ do
+        route (gsubRoute "biblio/" (const "static/biblio/"))
+        compile copyFileCompiler
 
 
 --------------------------------------------------------------------------------
@@ -134,7 +154,9 @@ rootUrl = "https://mvalvekens.be"
 postCtx :: Tags -> Context String
 postCtx tags =  tagsField "tags" tags 
              -- Use the One True Date Order (YYYY-mm-dd)
-             <> dateField "date" "%F" <> defaultContext
+             <> dateField "date" "%F" 
+             <> copyrightContext
+             <> defaultContext
 
 iconContext :: Context String
 iconContext = field "icon" $ \item -> do
@@ -145,6 +167,23 @@ labelContext :: Context String
 labelContext = field "label" $ \item -> do
     metadata <- getMetadata (itemIdentifier item)
     return $ fromMaybe "" $ lookupString "label" metadata
+
+
+copyrightLine :: String
+copyrightLine = "&#169; Matthias Valvekens"
+
+copyrightContext :: Context String
+copyrightContext = licenseContext <> constField "copyrightline" copyrightLine
+
+licenseContext :: Context String
+licenseContext = field "license" $ \item -> do
+    metadata <- getMetadata (itemIdentifier item)
+    case lookupString "license" metadata of
+        Just "CC BY-SA 4.0" -> loadBody "snippets/copyright/cc-by-sa-4.0.html"
+        -- TODO add a template for CC BY-SA content with differently licensed code snippets
+        -- (I don't want to accidentally require CC compliance for code)
+        _ -> return ""
+        
 
 sortByMetadata :: (MonadMetadata m, MonadFail m) => String -> [Item a] -> m [Item a]
 sortByMetadata theMeta = sortByM $ extract . itemIdentifier
@@ -158,6 +197,34 @@ sortByMetadata theMeta = sortByM $ extract . itemIdentifier
 -------------------------------------------------
 -- Pandoc stuff for blog posts
 
+-- Modified version of readPandocBiblio from Hakyll.Web.Pandoc.Biblio to use the
+-- embedded "references" entry in the metadata of our post
+readPandocBiblioFromMeta :: ReaderOptions -> Item CSL 
+                         -> Item String -> Compiler (Item Pandoc)
+readPandocBiblioFromMeta ropt csl item = do
+    Pandoc.Pandoc (Pandoc.Meta meta) blocks <- itemBody <$>
+        readPandocWith ropt item
+
+    let cslFile = Pandoc.FileInfo zeroTime . unCSL $ itemBody csl
+        addBiblioFiles = \st -> st
+            { Pandoc.stFiles =
+                Pandoc.insertInFileTree "_hakyll/style.csl" cslFile $
+                Pandoc.stFiles st
+            }
+        biblioMeta = Pandoc.Meta .
+            Map.insert "csl" (Pandoc.MetaString "_hakyll/style.csl") $
+            meta
+        errOrPandoc = Pandoc.runPure $ do
+            Pandoc.modifyPureState addBiblioFiles
+            Pandoc.processCitations $ Pandoc.Pandoc biblioMeta blocks
+
+    pandoc <- case errOrPandoc of
+        Left  e -> compilerThrow ["Error during processCitations: " ++ show e]
+        Right x -> return x
+
+    return $ fmap (const pandoc) item
+  where zeroTime = Time.UTCTime (toEnum 0) 0
+
 
 shiftAndStyleHeadings :: Int -> Block -> Block
 shiftAndStyleHeadings by (Header lvl attr content) = Header lvl' attr' content
@@ -168,8 +235,15 @@ shiftAndStyleHeadings by (Header lvl attr content) = Header lvl' attr' content
           attr' = (elId, classes', kvals)
 shiftAndStyleHeadings _ x = x
 
+
 pandocBlogPostCompiler :: Compiler (Item String)
-pandocBlogPostCompiler = pandocCompilerWithTransform ro wo transform
+pandocBlogPostCompiler = do
+        csl <- load $ fromFilePath "biblio/bibstyle.csl"
+        liftM processPandoc (getResourceBody >>= readPandocBiblioFromMeta ro csl)
     where wo = defaultHakyllWriterOptions
           ro = defaultHakyllReaderOptions
+            { -- The following option enables citation rendering
+              readerExtensions = enableExtension Ext_citations $ readerExtensions defaultHakyllReaderOptions
+            }
           transform = runIdentity . (walkPandocM $ return . shiftAndStyleHeadings 1)
+          processPandoc = writePandocWith wo . fmap transform
