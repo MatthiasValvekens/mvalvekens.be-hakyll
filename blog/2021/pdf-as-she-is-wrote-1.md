@@ -103,7 +103,7 @@ The certificate is only relevant to verify the binding between a key and its own
 
 So, how _does_ CMS identify signers? To answer that question, we need to take a look at some definitions from  [@cms].
 
-```asn1
+```{.asn1 .number-lines}
 SignedData ::= SEQUENCE {
        version CMSVersion,
        digestAlgorithms DigestAlgorithmIdentifiers,
@@ -142,7 +142,7 @@ It's important to observe that the `sid` field is not actually part of the porti
 
 `IssuerAndSerialNumber` is defined like this:
 
-```asn1
+```{.asn1 .number-lines}
 IssuerAndSerialNumber ::= SEQUENCE {
        issuer Name,
        serialNumber CertificateSerialNumber }
@@ -157,7 +157,7 @@ The meaning of `IssuerAndSerialNumber` as an identifier is very straightforward:
 
 If you take a look at [@cms], you'll notice that the definition of `SubjectKeyIdentifier` is simply this:
 
-```asn1
+```{.asn1 .number-lines}
 SubjectKeyIdentifier ::= OCTET STRING
 ```
 
@@ -190,7 +190,7 @@ PDF had support for digital signatures long before it became an ISO standard, an
 
 The current CMS definition still shows some hints of this history, as indicated by the fact that the `subjectKeyIdentifier` in the definition below has a context-specific tag of `0`, while the `issuerAndSerialNumber` field is universally tagged.
 
-```asn1
+```{.asn1 .number-lines}
 SignerIdentifier ::= CHOICE {
        issuerAndSerialNumber IssuerAndSerialNumber,
        subjectKeyIdentifier [0] SubjectKeyIdentifier }
