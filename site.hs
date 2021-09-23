@@ -169,11 +169,21 @@ labelContext = field "label" $ \item -> do
     return $ fromMaybe "" $ lookupString "label" metadata
 
 
-copyrightLine :: String
-copyrightLine = "&#169; Matthias Valvekens"
+mainAuthor :: String
+mainAuthor = "Matthias Valvekens"
+
+getItemAuthor :: Item a -> Compiler (Maybe String)
+getItemAuthor item = getMetadata (itemIdentifier item)
+                    >>= return . lookupString "author"
 
 copyrightContext :: Context String
-copyrightContext = licenseContext <> constField "copyrightline" copyrightLine
+copyrightContext = licenseContext
+        <> field "author" (fmap (fromMaybe "") . getItemAuthor)
+        <> field "copyrightline" (fmap cline . getItemAuthor)
+    where cline Nothing = mainAuthor
+          cline (Just author)
+            | author == mainAuthor = mainAuthor
+            | otherwise = author <> ", " <> mainAuthor
 
 licenseContext :: Context String
 licenseContext = field "license" $ \item -> do
