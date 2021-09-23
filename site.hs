@@ -25,6 +25,8 @@ import qualified Data.ByteString as BS
 import Control.Monad (liftM)
 import Control.Monad.Identity (runIdentity)
 
+import qualified GHC.IO.Encoding as E
+
 
 --------------------------------------------------------------------------------
 
@@ -35,7 +37,13 @@ simpleStaticAssets :: Pattern
 simpleStaticAssets = ("static/**" .&&. complement unminifiedCss) .||. "robots.txt"
 
 main :: IO ()
-main = hakyll $ do
+main = do
+    -- because anything other than UTF-8 is ridiculous.
+    E.setLocaleEncoding E.utf8
+    hakyll hakyllRules
+
+hakyllRules :: Rules ()
+hakyllRules = do
     match simpleStaticAssets $ do
         route   idRoute
         compile copyFileCompiler
