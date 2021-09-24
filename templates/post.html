@@ -1,10 +1,28 @@
-<h1 class="title blog-title has-text-centered">$title$</h1>
 <article class="article">
-    <section class="header info">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org/",
+            "@type": "Article",
+            "name": "$title$",
+            $if(author)$
+            "author": {
+                "@type": "Person",
+                "name": "$author$"
+            },
+            $endif$
+            "datePublished": "$date$",
+            "accessMode": "textual",
+            "isAccessibleForFree": true
+        }
+    </script>
+    <h1 class="title blog-title has-text-centered">$title$</h1>
+    <section class="article-info">
         <p>
-        Posted on $date$
+        Posted on <time pubdate datetime="$date$">$date$</time>
         $if(author)$
-            by $author$
+            <span itemscope itemtype="http://schema.org/Person">
+                by <span itemprop="author">$author$</span>
+            </span>
         $endif$
         </p>
         $if(tags)$
