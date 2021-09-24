@@ -218,6 +218,7 @@ getItemAuthor item = getMetadata (itemIdentifier item)
 copyrightContext :: Context String
 copyrightContext = licenseContext
         <> field "author" (getItemAuthor >=> checkAuthor)
+        <> fieldFromItemMeta "author-url"
         <> field "copyrightline" (fmap cline . getItemAuthor)
     where cline Nothing = mainAuthor
           cline (Just author)
@@ -226,15 +227,34 @@ copyrightContext = licenseContext
           checkAuthor Nothing = noResult "No author"
           checkAuthor (Just author) = return author
 
+data LicenseInfo = LicenseInfo 
+    { licenseSnippetId :: Identifier
+    , licenseUrl :: String }
+
+-- TODO add a template for CC BY-SA content with differently 
+-- licensed code snippets
+-- (I don't want to accidentally require CC compliance for code)
+licInfo' :: String -> Maybe LicenseInfo
+licInfo' "CC BY-SA 4.0" = Just $ LicenseInfo
+    { licenseSnippetId = "snippets/copyright/cc-by-sa-4.0.html"
+    , licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/" }
+licInfo' x = Nothing
+
+licenseInfo :: Identifier -> Compiler LicenseInfo
+licenseInfo ident = do
+    declaredLicense <- getStringFromMeta "license" ident
+    case licInfo' declaredLicense of
+        Nothing -> fail $ 
+            "License " ++ declaredLicense 
+                ++ " is not known to the templating engine"
+        Just x -> return x
+
 licenseContext :: Context String
-licenseContext = field "license" $ \item -> do
-    declaredLicense <- getStringFromMeta "license" (itemIdentifier item)
-    case declaredLicense of
-        -- TODO add a template for CC BY-SA content with differently 
-        -- licensed code snippets
-        -- (I don't want to accidentally require CC compliance for code)
-        "CC BY-SA 4.0" -> loadBody "snippets/copyright/cc-by-sa-4.0.html"
-        x -> fail $ "License " ++ x ++ " is not known to the templating engine"
+licenseContext 
+        = (field "license" $ licForItem >=> loadBody . licenseSnippetId)
+        <> (field "license-url" $ licForItem >=> return . licenseUrl)
+    where licForItem :: Item a -> Compiler LicenseInfo
+          licForItem = licenseInfo . itemIdentifier
 
 sortByMetadata :: (MonadMetadata m, MonadFail m) => String -> [Item a] -> m [Item a]
 sortByMetadata theMeta = sortByM $ extract . itemIdentifier

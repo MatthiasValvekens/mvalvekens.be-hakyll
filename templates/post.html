@@ -1,17 +1,21 @@
 <article class="article">
+    <!-- TODO generalise this -->
     <script type="application/ld+json">
         {
             "@context": "https://schema.org/",
             "@type": "Article",
             "name": "$title$",
+            "headline": "$title$",
             $if(author)$
             "author": {
                 "@type": "Person",
+                $if(author-url)$"url": "$author-url$",$endif$
                 "name": "$author$"
             },
             $endif$
             "datePublished": "$date$",
             "accessMode": "textual",
+            $if(license-url)$"license": "$license-url$",$endif$
             "isAccessibleForFree": true
         }
     </script>
