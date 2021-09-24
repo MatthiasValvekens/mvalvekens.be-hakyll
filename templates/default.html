@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-gb" class="has-navbar-fixed-top">
+<html lang="en-gb">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="/static/css/blog.css">
         <!-- see /static/css/LICENSE.syntax -->
         <link rel="stylesheet" href="/static/css/syntax.css">
+        <link rel="stylesheet" href="/static/css/misc.css">
         <script src="/static/js/website-nav.js"></script>
         <script>document.addEventListener('DOMContentLoaded', activateNavbarBurger);</script>
     </head>
@@ -44,11 +45,13 @@
                 </div>
             </nav>
         </header>
-        <main role="main">
-            $body$
-        </main>
-        <footer class="footer has-text-centered is-size-7">
-            $partial("templates/copyright.html")$
-        </footer>
+        <div id="content-wrapper">
+            <main role="main">
+                $body$
+            </main>
+            <footer class="footer has-text-centered is-size-7">
+                $partial("templates/copyright.html")$
+            </footer>
+        </div>
     </body>
 </html>
