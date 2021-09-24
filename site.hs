@@ -15,14 +15,14 @@ import Hakyll.Core.Compiler.Internal (compilerThrow)
 
 import Data.Monoid (mappend)
 import Data.Ord (comparing)
-import Data.List (sortBy)
+import Data.List (sortBy, nub, intercalate)
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.Time as Time
 import qualified Data.Text as T
 import qualified Data.ByteString as BS
 
-import Control.Monad (liftM)
+import Control.Monad (liftM, (>=>))
 import Control.Monad.Identity (runIdentity)
 
 import qualified GHC.IO.Encoding as E
@@ -101,20 +101,22 @@ hakyllRules = do
 
     -- Build tags and tag summary pages
     tags <- buildTags "blog/**" (fromCapture "tags/*.html")
-    -- these templates contain just the summary text; they're optional and not routed
+    -- these templates contain just the summary text; they're optional
+    -- and not routed
     match "tag-summaries/*.md" $ compile pandocCompiler
     -- this generates the actual tag summary pages
     tagsRules tags $ \tag pattern -> do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll pattern
-            let tagSummary = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
+            let tagSummary = tagSummaryId tag
             let ctx = constField "title" ("Entries tagged \"" ++ tag ++ "\"")
                     <> constField "tag" tag
                     -- read summary
                     <> field "tag-summary" (const $ loadBody tagSummary)
                     <> listField "posts" (postCtx tags) (return posts)
                     <> copyrightContext
+                    <> keywordsContext
                     <> defaultContext
 
             makeItem ""
@@ -136,7 +138,7 @@ hakyllRules = do
 
     match "blog/**" $ do
         route $ setExtension "html"
-        let ctx = postCtx tags
+        let ctx = keywordsContext <> postCtx tags
         compile $ pandocBlogPostCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx 
             >>= loadAndApplyTemplate "templates/default.html" ctx
@@ -176,22 +178,47 @@ labelContext = field "label" $ \item -> do
     metadata <- getMetadata (itemIdentifier item)
     return $ fromMaybe "" $ lookupString "label" metadata
 
+tagSummaryId :: String -> Identifier
+tagSummaryId tag = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
+
+-- grab keywords from a tag summary
+-- if there are no keywords --> use the tag itself
+keywordsForTag :: String -> Compiler [String]
+keywordsForTag tag = do
+    metadata <- getMetadata (tagSummaryId tag)
+    return $ fromMaybe [tag] (lookupStringList "keywords" metadata)
+
+keywordsContext :: Context String
+keywordsContext = field "keywords" $ \item -> do
+    metadata <- getMetadata (itemIdentifier item)
+    -- intention: tags is for blog posts, keywords for metadata
+    let keywordsMeta = fromMaybe [] (lookupStringList "keywords" metadata)
+    let tagsMeta = fromMaybe [] (lookupStringList "tags" metadata)
+    -- grab keywords for all tag summaries
+    tagsKw <- traverse keywordsForTag tagsMeta
+    -- only retain uniques
+    -- (nub is fine, since we don't expect these lists to be very long)
+    let keywords = nub $ concat $ (keywordsMeta:tagsKw)
+    if null keywords then noResult "No keywords" 
+                     else (return $ intercalate ", " keywords)
 
 mainAuthor :: String
 mainAuthor = "Matthias Valvekens"
 
 getItemAuthor :: Item a -> Compiler (Maybe String)
 getItemAuthor item = getMetadata (itemIdentifier item)
-                    >>= return . lookupString "author"
+        >>= return . lookupString "author"
 
 copyrightContext :: Context String
 copyrightContext = licenseContext
-        <> field "author" (fmap (fromMaybe "") . getItemAuthor)
+        <> field "author" (getItemAuthor >=> checkAuthor)
         <> field "copyrightline" (fmap cline . getItemAuthor)
     where cline Nothing = mainAuthor
           cline (Just author)
             | author == mainAuthor = mainAuthor
             | otherwise = author <> ", " <> mainAuthor
+          checkAuthor Nothing = noResult "No author"
+          checkAuthor (Just author) = return author
 
 licenseContext :: Context String
 licenseContext = field "license" $ \item -> do
