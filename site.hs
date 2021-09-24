@@ -168,15 +168,21 @@ postCtx tags =  tagsField "tags" tags
              <> copyrightContext
              <> defaultContext
 
+getStringFromMeta :: String -> Identifier -> Compiler String
+getStringFromMeta entryKey ident = do
+    metadata <- getMetadata ident
+    case lookupString entryKey metadata of
+        Nothing -> noResult $ "No " ++ entryKey ++ " in metadata"
+        Just value -> return value
+
+fieldFromItemMeta :: String -> Context String
+fieldFromItemMeta name = field name $ getStringFromMeta name . itemIdentifier
+
 iconContext :: Context String
-iconContext = field "icon" $ \item -> do
-    metadata <- getMetadata (itemIdentifier item)
-    return $ fromMaybe "" $ lookupString "icon" metadata
+iconContext = fieldFromItemMeta "icon"
 
 labelContext :: Context String
-labelContext = field "label" $ \item -> do
-    metadata <- getMetadata (itemIdentifier item)
-    return $ fromMaybe "" $ lookupString "label" metadata
+labelContext = fieldFromItemMeta "label"
 
 tagSummaryId :: String -> Identifier
 tagSummaryId tag = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
@@ -222,13 +228,13 @@ copyrightContext = licenseContext
 
 licenseContext :: Context String
 licenseContext = field "license" $ \item -> do
-    metadata <- getMetadata (itemIdentifier item)
-    case lookupString "license" metadata of
-        Just "CC BY-SA 4.0" -> loadBody "snippets/copyright/cc-by-sa-4.0.html"
-        -- TODO add a template for CC BY-SA content with differently licensed code snippets
+    declaredLicense <- getStringFromMeta "license" (itemIdentifier item)
+    case declaredLicense of
+        -- TODO add a template for CC BY-SA content with differently 
+        -- licensed code snippets
         -- (I don't want to accidentally require CC compliance for code)
-        _ -> return ""
-        
+        "CC BY-SA 4.0" -> loadBody "snippets/copyright/cc-by-sa-4.0.html"
+        x -> fail $ "License " ++ x ++ " is not known to the templating engine"
 
 sortByMetadata :: (MonadMetadata m, MonadFail m) => String -> [Item a] -> m [Item a]
 sortByMetadata theMeta = sortByM $ extract . itemIdentifier
