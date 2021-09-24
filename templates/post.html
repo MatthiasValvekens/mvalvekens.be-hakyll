@@ -1,19 +1,17 @@
-<h1 class="title has-text-centered">$title$</h1>
-<div class="container">
-    <article class="article">
-        <section class="header info has-text-centered" style="margin-bottom: 2rem;">
-            <p class="is-italic">
-            Posted on $date$
-            $if(author)$
-                by $author$
-            $endif$
-            </p>
-            $if(tags)$
-                <p>Tags: $tags$</p>
-            $endif$
-        </section>
-        <section class="blog-paras">
-            $body$
-        </section>
-    </article>
-</div>
+<h1 class="title blog-title has-text-centered">$title$</h1>
+<article class="article">
+    <section class="header info">
+        <p>
+        Posted on $date$
+        $if(author)$
+            by $author$
+        $endif$
+        </p>
+        $if(tags)$
+            <p>Tags: $tags$</p>
+        $endif$
+    </section>
+    <section class="blog-paras">
+        $body$
+    </section>
+</article>

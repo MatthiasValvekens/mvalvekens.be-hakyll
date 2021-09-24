@@ -1,8 +1,35 @@
 /* Blog text styling */
 
+.blog-paras {
+    max-width: 80ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.blog-title {
+    margin-top: 1.5rem;
+}
+
 .blog-paras p {
     margin-top: 0.7rem;
     margin-bottom: 1rem;
+    text-align: justify;
+    hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+.blog-paras h2 {
+    margin-top: 3rem;
+}
+
+.blog-paras h3 {
+    margin-top: 2rem;
+}
+
+section.header {
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .footnotes hr {
