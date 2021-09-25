@@ -5,7 +5,11 @@
             "@context": "https://schema.org/",
             "@type": "Article",
             "name": "$title$",
+            $if(part-title)$
+            "headline": "$part-title$",
+            $else$
             "headline": "$title$",
+            $endif$
             $if(author)$
             "author": {
                 "@type": "Person",
@@ -13,6 +17,8 @@
                 "name": "$author$"
             },
             $endif$
+            $if(series-meta)$"isPartOf": $series-meta$,$endif$
+            $if(series-part)$"position": $series-part$,$endif$
             "datePublished": "$date$",
             "accessMode": "textual",
             $if(license-url)$"license": "$license-url$",$endif$
@@ -32,6 +38,7 @@
         $if(tags)$
             <p>Tags: $tags$</p>
         $endif$
+        $if(series)$ $series$ $endif$
     </section>
     <section class="blog-paras">
         $body$

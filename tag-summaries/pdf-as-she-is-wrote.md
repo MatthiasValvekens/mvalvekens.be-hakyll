@@ -1,4 +1,6 @@
 ---
+title: "PDF As She Is Wrote"
+series: true
 keywords: [pdf]
 ---
 

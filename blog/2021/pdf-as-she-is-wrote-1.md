@@ -1,7 +1,10 @@
 ---
 title: "PDF As She Is Wrote #1: How are signers identified?"
+part-title: "How are signers identified?"
 tags: ["pdf-as-she-is-wrote", "tech", "pki", "digsig", "documentation"]
 author: Matthias Valvekens
+series: pdf-as-she-is-wrote
+series-part: 1
 author-url: "https://mvalvekens.be/about.html"
 published: 2021-09-22
 license: "CC BY-SA 4.0"

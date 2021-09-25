@@ -110,11 +110,12 @@ hakyllRules = do
         compile $ do
             posts <- recentFirst =<< loadAll pattern
             let tagSummary = tagSummaryId tag
-            let ctx = constField "title" ("Entries tagged \"" ++ tag ++ "\"")
-                    <> constField "tag" tag
+            let ctx = constField "tag" tag
                     -- read summary
                     <> field "tag-summary" (const $ loadBody tagSummary)
                     <> listField "posts" (postCtx tags) (return posts)
+                    <> seriesCtx tag
+                    <> constField "title" ("Entries tagged \"" ++ tag ++ "\"")
                     <> copyrightContext
                     <> keywordsContext
                     <> defaultContext
@@ -160,13 +161,12 @@ hakyllRules = do
 rootUrl :: String
 rootUrl = "https://mvalvekens.be"
 
+tagSummaryId :: String -> Identifier
+tagSummaryId tag = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
 
-postCtx :: Tags -> Context String
-postCtx tags =  tagsField "tags" tags 
-             -- Use the One True Date Order (YYYY-mm-dd)
-             <> dateField "date" "%F" 
-             <> copyrightContext
-             <> defaultContext
+tagSummaryUrl :: String -> String
+tagSummaryUrl tag = "/tags/" ++ tag ++ ".html"
+
 
 getStringFromMeta :: String -> Identifier -> Compiler String
 getStringFromMeta entryKey ident = do
@@ -178,14 +178,48 @@ getStringFromMeta entryKey ident = do
 fieldFromItemMeta :: String -> Context String
 fieldFromItemMeta name = field name $ getStringFromMeta name . itemIdentifier
 
+
+fmtSeriesInfo :: Identifier -> String -> Compiler String
+fmtSeriesInfo template seriesTag = do
+     let tagSummary = tagSummaryId seriesTag
+     seriesMeta <- getMetadata tagSummary
+     let seriesUrl = rootUrl <> tagSummaryUrl seriesTag
+     let ctx = constField "series-url" seriesUrl <> defaultContext
+     result <- load tagSummary >>= loadAndApplyTemplate template ctx
+     return (itemBody result)
+
+
+seriesCtx :: String -> Context String
+seriesCtx tag = field "series-meta" (const meta)
+              <> field "title" (const getTitle)
+    where meta = fmtSeriesInfo "templates/series-info.json" tag
+          getTitle = getStringFromMeta "title" (tagSummaryId tag)
+
+seriesPartCtx :: Context String
+seriesPartCtx = field "series-meta" getSeriesMeta
+              <> field "series" getSeriesInfo
+              <> fieldFromItemMeta "series-part"
+              <> fieldFromItemMeta "part-title"
+    where getSeriesMeta item = do
+             seriesTag <- getStringFromMeta "series" (itemIdentifier item)
+             fmtSeriesInfo "templates/series-info.json" seriesTag
+          getSeriesInfo item = do
+             seriesTag <- getStringFromMeta "series" (itemIdentifier item)
+             fmtSeriesInfo "templates/series-info.html" seriesTag
+
+postCtx :: Tags -> Context String
+postCtx tags =  tagsField "tags" tags 
+             -- Use the One True Date Order (YYYY-mm-dd)
+             <> dateField "date" "%F" 
+             <> seriesPartCtx
+             <> copyrightContext
+             <> defaultContext
+
 iconContext :: Context String
 iconContext = fieldFromItemMeta "icon"
 
 labelContext :: Context String
 labelContext = fieldFromItemMeta "label"
-
-tagSummaryId :: String -> Identifier
-tagSummaryId tag = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
 
 -- grab keywords from a tag summary
 -- if there are no keywords --> use the tag itself

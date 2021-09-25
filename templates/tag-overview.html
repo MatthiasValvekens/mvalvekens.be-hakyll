@@ -1,5 +1,10 @@
 <h1 class="title has-text-centered">Blog entries tagged "$tag$"</h1>
 <div class="container">
+    $if(series-meta)$
+    <script type="application/ld+json">
+        $series-meta$
+    </script>
+    $endif$
     <section class="section">
         <h2 class="is-5 subtitle has-text-centered">Summary</h2>
         $if(tag-summary)$
