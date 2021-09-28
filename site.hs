@@ -101,7 +101,7 @@ hakyllRules = do
             makeItem "" >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
 
     -- Build tags and tag summary pages
-    tags <- buildTags "blog/**" (fromCapture tagPagePattern)
+    tags <- buildTags ("blog/**" .&&. hasNoVersion) (fromCapture tagPagePattern)
     -- this generates the actual tag summary pages
     tagsRules tags $ \tag pattern -> do
         route idRoute
@@ -126,7 +126,7 @@ hakyllRules = do
     match "blog.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "blog/**"
+            posts <- recentFirst =<< loadAll ("blog/**" .&&. hasNoVersion)
             let ctx = listField "posts" (postCtx tags) (return posts)
                     <> copyrightContext
                     <> defaultContext
