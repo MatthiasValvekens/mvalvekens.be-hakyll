@@ -24,6 +24,7 @@ import qualified Data.ByteString as BS
 
 import Control.Monad (liftM, (>=>))
 import Control.Monad.Identity (runIdentity)
+import System.FilePath (takeBaseName)
 
 import qualified GHC.IO.Encoding as E
 
@@ -100,10 +101,7 @@ hakyllRules = do
             makeItem "" >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
 
     -- Build tags and tag summary pages
-    tags <- buildTags "blog/**" (fromCapture "tags/*.html")
-    -- these templates contain just the summary text; they're optional
-    -- and not routed
-    match "tag-summaries/*.md" $ compile pandocCompiler
+    tags <- buildTags "blog/**" (fromCapture tagPagePattern)
     -- this generates the actual tag summary pages
     tagsRules tags $ \tag pattern -> do
         route idRoute
@@ -139,21 +137,53 @@ hakyllRules = do
 
     match "blog/**" $ do
         route $ setExtension "html"
-        let ctx = keywordsContext <> postCtx tags
+        let ctx = field "article-meta" jsonldMetaForItem <> postCtx tags
         compile $ pandocBlogPostCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx 
             >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
 
-    match "templates/*" $ compile templateBodyCompiler
+    match "blog/**" $ version "jsonld-meta" $ do
+        -- override the url field to point to the base version
+        let ctx = field "abs-url" (absoluteUri . forBaseVer) 
+                <> field "url" (routeOrFail . forBaseVer) <> postCtx tags 
+        compile $ makeItem ""
+            >>= loadAndApplyTemplate "templates/jsonld/article-info.json" ctx
+
+    match "templates/**" $ compile templateBodyCompiler
     match "snippets/**" $ compile getResourceBody
-    match "tag-summaries/*" $ compile getResourceBody
+    -- these templates contain just the summary text; they're optional
+    -- and not routed
+    match "tag-summaries/*.md" $ compile pandocCompiler
+    matchMetadata "tag-summaries/*" isSeries $ version "jsonld-meta" $ do
+        let ctx = field "url" (routeOrFail . tagPageFromSummary)
+                <> field "abs-url" (absoluteUri . tagPageFromSummary) 
+                <> defaultContext
+        compile $ makeItem "" 
+            >>= loadAndApplyTemplate "templates/jsonld/series-info.json" ctx
+
+    matchMetadata "tag-summaries/*" isSeries $ version "series-ref" $ do
+        let ctx = field "url" (routeOrFail . tagPageFromSummary)
+                <> field "abs-url" (absoluteUri . tagPageFromSummary) 
+                <> defaultContext
+        compile $ makeItem "" 
+            >>= loadAndApplyTemplate "templates/jsonld/series-ref.json" ctx
+
+    matchMetadata "tag-summaries/*" isSeries $ version "series-info" $ do
+        let ctx = field "url" (routeOrFail . tagPageFromSummary) <> defaultContext
+        compile $ makeItem ""
+            >>= loadAndApplyTemplate "templates/series-info.html" ctx
+
     match "about/*" $ compile $ do
         getResourceBody >>= applyAsTemplate snippetField
     match "biblio/*.csl" $ compile cslCompiler
     match "biblio/*.csl" $ version "biblio-publish" $ do
         route (gsubRoute "biblio/" (const "static/biblio/"))
         compile copyFileCompiler
+    where isSeries meta = lookupString "series" meta == Just "true"
+          forBaseVer = setVersion Nothing . itemIdentifier
+          tagPageFromSummary = fromCapture tagPagePattern 
+                             . takeBaseName . toFilePath . itemIdentifier
 
 
 --------------------------------------------------------------------------------
@@ -161,11 +191,11 @@ hakyllRules = do
 rootUrl :: String
 rootUrl = "https://mvalvekens.be"
 
+tagPagePattern :: Pattern
+tagPagePattern = "tags/*.html"
+
 tagSummaryId :: String -> Identifier
 tagSummaryId tag = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
-
-tagSummaryUrl :: String -> String
-tagSummaryUrl tag = "/tags/" ++ tag ++ ".html"
 
 
 getStringFromMeta :: String -> Identifier -> Compiler String
@@ -179,21 +209,29 @@ fieldFromItemMeta :: String -> Context String
 fieldFromItemMeta name = field name $ getStringFromMeta name . itemIdentifier
 
 
-fmtSeriesInfo :: Identifier -> String -> Compiler String
-fmtSeriesInfo template seriesTag = do
-     let tagSummary = tagSummaryId seriesTag
-     seriesMeta <- getMetadata tagSummary
-     let seriesUrl = rootUrl <> tagSummaryUrl seriesTag
-     let ctx = constField "series-url" seriesUrl <> defaultContext
-     result <- load tagSummary >>= loadAndApplyTemplate template ctx
-     return (itemBody result)
+jsonldMetaFor :: Identifier -> Compiler String
+jsonldMetaFor = loadBody . setVersion (Just "jsonld-meta")
+
+jsonldMetaForItem :: Item a -> Compiler String
+jsonldMetaForItem = jsonldMetaFor . itemIdentifier
+
+
+routeOrFail :: Identifier -> Compiler String
+routeOrFail ident = do
+    maybeRoute <- getRoute ident
+    case maybeRoute of
+        Nothing -> fail $ "No route to '" ++ show ident ++ "'."
+        Just x -> return ("/" ++ x)
+
+absoluteUri :: Identifier -> Compiler String
+absoluteUri = fmap (rootUrl++) . routeOrFail
 
 
 seriesCtx :: String -> Context String
 seriesCtx tag = field "series-meta" (const meta)
               <> field "title" (const getTitle)
-    where meta = fmtSeriesInfo "templates/series-info.json" tag
-          getTitle = getStringFromMeta "title" (tagSummaryId tag)
+    where getTitle = getStringFromMeta "title" (tagSummaryId tag)
+          meta = jsonldMetaFor (tagSummaryId tag)
 
 seriesPartCtx :: Context String
 seriesPartCtx = field "series-meta" getSeriesMeta
@@ -202,16 +240,19 @@ seriesPartCtx = field "series-meta" getSeriesMeta
               <> fieldFromItemMeta "part-title"
     where getSeriesMeta item = do
              seriesTag <- getStringFromMeta "series" (itemIdentifier item)
-             fmtSeriesInfo "templates/series-info.json" seriesTag
+             let tsi = tagSummaryId seriesTag
+             loadBody (setVersion (Just "series-ref") tsi)
           getSeriesInfo item = do
              seriesTag <- getStringFromMeta "series" (itemIdentifier item)
-             fmtSeriesInfo "templates/series-info.html" seriesTag
+             let tsi = tagSummaryId seriesTag
+             loadBody (setVersion (Just "series-info") tsi)
 
 postCtx :: Tags -> Context String
 postCtx tags =  tagsField "tags" tags 
              -- Use the One True Date Order (YYYY-mm-dd)
              <> dateField "date" "%F" 
              <> seriesPartCtx
+             <> keywordsContext
              <> copyrightContext
              <> defaultContext
 

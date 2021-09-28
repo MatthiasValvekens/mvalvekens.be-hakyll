@@ -1,0 +1,25 @@
+{
+    "@context": "https://schema.org/",
+    "@id": "$url$",
+    "@type": "Article",
+    "url": "$url$",
+    "name": "$title$",
+    $if(part-title)$
+    "headline": "$part-title$",
+    $else$
+    "headline": "$title$",
+    $endif$
+    $if(author)$
+    "author": {
+        "@type": "Person",
+        $if(author-url)$"url": "$author-url$",$endif$
+        "name": "$author$"
+    },
+    $endif$
+    $if(series-meta)$"isPartOf": $series-meta$,$endif$
+    $if(series-part)$"position": $series-part$,$endif$
+    "datePublished": "$date$",
+    "accessMode": "textual",
+    $if(license-url)$"license": "$license-url$",$endif$
+    "isAccessibleForFree": true
+}

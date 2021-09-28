@@ -1,0 +1,12 @@
+{
+    "@id": "$abs-url$",
+    "@type": "CreativeWorkSeries",
+    "url": "$url$",
+    $if(parts)$
+    "hasPart": [
+        $for(part)$
+        $endfor$
+    ]
+    $endif$
+    "name": "$title$"
+}

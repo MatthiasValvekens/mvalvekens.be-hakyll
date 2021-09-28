@@ -1,29 +1,6 @@
 <article class="article">
-    <!-- TODO generalise this -->
     <script type="application/ld+json">
-        {
-            "@context": "https://schema.org/",
-            "@type": "Article",
-            "name": "$title$",
-            $if(part-title)$
-            "headline": "$part-title$",
-            $else$
-            "headline": "$title$",
-            $endif$
-            $if(author)$
-            "author": {
-                "@type": "Person",
-                $if(author-url)$"url": "$author-url$",$endif$
-                "name": "$author$"
-            },
-            $endif$
-            $if(series-meta)$"isPartOf": $series-meta$,$endif$
-            $if(series-part)$"position": $series-part$,$endif$
-            "datePublished": "$date$",
-            "accessMode": "textual",
-            $if(license-url)$"license": "$license-url$",$endif$
-            "isAccessibleForFree": true
-        }
+        $article-meta$
     </script>
     <h1 class="title blog-title has-text-centered">$title$</h1>
     <section class="article-info">
