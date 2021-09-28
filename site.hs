@@ -15,7 +15,7 @@ import Hakyll.Core.Compiler.Internal (compilerThrow)
 
 import Data.Monoid (mappend)
 import Data.Ord (comparing)
-import Data.List (sortBy, nub, intercalate)
+import Data.List (sortBy, nub, intercalate, find)
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.Time as Time
@@ -156,11 +156,12 @@ hakyllRules = do
     -- and not routed
     match "tag-summaries/*.md" $ compile pandocCompiler
     matchMetadata "tag-summaries/*" isSeries $ version "jsonld-meta" $ do
-        let ctx = field "url" (routeOrFail . tagPageFromSummary)
-                <> field "abs-url" (absoluteUri . tagPageFromSummary) 
-                <> defaultContext
-        compile $ makeItem "" 
-            >>= loadAndApplyTemplate "templates/jsonld/series-info.json" ctx
+            let ctx = field "url" (routeOrFail . tagPageFromSummary)
+                    <> field "abs-url" (absoluteUri . tagPageFromSummary) 
+                    <> listFieldWith "parts"  seriesPartContext (seriesParts tags)
+                    <> defaultContext
+            compile $ makeItem "" 
+                >>= loadAndApplyTemplate "templates/jsonld/series-info.json" ctx
 
     matchMetadata "tag-summaries/*" isSeries $ version "series-ref" $ do
         let ctx = field "url" (routeOrFail . tagPageFromSummary)
@@ -182,8 +183,17 @@ hakyllRules = do
         compile copyFileCompiler
     where isSeries meta = lookupString "series" meta == Just "true"
           forBaseVer = setVersion Nothing . itemIdentifier
-          tagPageFromSummary = fromCapture tagPagePattern 
-                             . takeBaseName . toFilePath . itemIdentifier
+          tagFromSummary = takeBaseName . toFilePath . itemIdentifier
+          tagPageFromSummary = fromCapture tagPagePattern . tagFromSummary
+          seriesParts tags item = do
+                -- manually extract tag pattern from tagMap
+                let maybeIdents = snd <$> find pred (tagsMap tags)
+                case maybeIdents of
+                    Nothing -> fail "Failed to extract tag pattern"
+                    Just idents -> chronological =<< loadAll (fromList idents)
+            where pred (tag, _) = tag == tagFromSummary item
+          seriesPartContext = field "abs-url" (absoluteUri . itemIdentifier) 
+                            <> defaultContext
 
 
 --------------------------------------------------------------------------------

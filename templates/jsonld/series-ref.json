@@ -1,5 +1,5 @@
 {
-    "@id": "$abs-url$",
+    "@id": "$abs-url$#series",
     "@type": "CreativeWorkSeries",
     "url": "$url$",
     "sameAs": "$url$",

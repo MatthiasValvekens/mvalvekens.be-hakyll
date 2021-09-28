@@ -1,12 +1,15 @@
 {
-    "@id": "$abs-url$",
+    "@context": "https://schema.org/",
+    "@id": "$abs-url$#series",
     "@type": "CreativeWorkSeries",
     "url": "$url$",
     $if(parts)$
     "hasPart": [
-        $for(part)$
-        $endfor$
-    ]
+        $for(parts)$ {
+            "@type": "Article",
+            "@id": "$abs-url$#article"
+        }$sep$, $endfor$
+    ],
     $endif$
     "name": "$title$"
 }
