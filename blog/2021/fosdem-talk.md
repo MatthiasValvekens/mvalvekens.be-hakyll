@@ -20,6 +20,7 @@ For further information, visit [the talk's info page](https://fosdem.org/2021/sc
   "@context": "https://schema.org",
   "@type": "VideoObject",
   "name": "Document security and digital signatures in PDF - FOSDEM 2021",
+  "description": "The push for paperless bureaucracy has been going on for quite some time, but the circumstances of the past year made the issue even more pressing than it already was. The PDF specification outlines a number of security features, including but not limited to encryption, digital signatures and redaction support. The goal of this talk is to give a broad overview of the various security mechanisms provided by the PDF standard and their applications in the real world, with a particular focus on digital signing.",
   "uploadDate": "2021-02-16",
   "duration": "PT44M22S",  
   "width": 560,
@@ -49,7 +50,7 @@ For further information, visit [the talk's info page](https://fosdem.org/2021/sc
     "@id": "https://fosdem.org/2021/schedule/event/safety_opensource_doc_security_pdf/#talk",
     "url": "https://fosdem.org/2021/schedule/event/safety_opensource_doc_security_pdf/",
     "name": "FOSDEM 2021 - Document security and digital signatures in PDF",
-    "actor": {
+    "performer": {
         "@type": "Person",
         "url": "https://mvalvekens.be/about.html",
         "name": "Matthias Valvekens"
