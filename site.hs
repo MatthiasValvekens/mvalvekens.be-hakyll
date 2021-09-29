@@ -27,7 +27,6 @@ import qualified Data.ByteString as BS
 import Data.ByteString.Lazy (toStrict)
 
 import Control.Monad (liftM, (>=>), msum)
-import Control.Monad.Identity (runIdentity)
 import System.FilePath (takeBaseName)
 
 import qualified GHC.IO.Encoding as E
@@ -58,26 +57,23 @@ hakyllRules = do
 
     match "index.html" $ do
         route idRoute
-        compile $ do
-            getResourceBody
-                >>= applyAsTemplate (snippetField <> defaultContext)
-                >>= relativizeUrls
+        -- note: demoteHeaders decodes entities, which we don't want
+        let ctx = snippetField <> defaultContext 
+        compile $ getResourceBody >>= applyAsTemplate ctx
 
     match unminifiedCss $ do
         route idRoute
         compile compressCssCompiler
 
-    create ["contact.html"] $ do
+    match "contact.html" $ do
         route idRoute
-        compile $ do
-            let ctx = constField "title" "Contact me" 
-                    <> copyrightContext
-                    <> defaultContext 
+        let ctx = constField "title" "Contact me" 
+                <> snippetField
+                <> copyrightContext
+                <> defaultContext 
 
-            body <- loadBody "snippets/contact-info.html"
-            makeItem body
-                >>= loadAndApplyTemplate "templates/default.html" ctx
-                >>= relativizeUrls 
+        compile $ getResourceBody >>= applyAsTemplate ctx 
+                  >>= loadAndApplyTemplate "templates/default.html" ctx
 
     create ["about.html"] $ do
         route idRoute
@@ -94,14 +90,13 @@ hakyllRules = do
             makeItem ""
                 >>= loadAndApplyTemplate "templates/about.html" aboutCtx
                 >>= loadAndApplyTemplate "templates/default.html" aboutCtx
-                >>= relativizeUrls
 
     -- Loosely based on https://robertwpearce.com/hakyll-pt-2-generating-a-sitemap-xml-file.html
     create ["sitemap.xml"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "blog/**"
-            specialPages <- loadAll (fromList ["about.html", "contact.html"])
+            posts <- recentFirst =<< loadAll ("blog/**" .&&. hasNoVersion)
+            specialPages <- loadAll (fromList ["about.html", "contact.html", "blog.html"])
             let pages = specialPages ++ posts
             let rootCtx = constField "rootUrl" rootUrl
             let pgCtx = listField "pages" (rootCtx <> defaultContext) (return pages)
@@ -128,7 +123,6 @@ hakyllRules = do
             makeItem ""
                 >>= loadAndApplyTemplate "templates/tag-overview.html" ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
-                >>= relativizeUrls
 
     match "blog.html" $ do
         route idRoute
@@ -140,7 +134,6 @@ hakyllRules = do
             getResourceBody
                 >>= applyAsTemplate ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
-                >>= relativizeUrls
 
     match "blog/**" $ do
         route $ setExtension "html"
@@ -148,7 +141,6 @@ hakyllRules = do
         compile $ pandocBlogPostCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx 
             >>= loadAndApplyTemplate "templates/default.html" ctx
-            >>= relativizeUrls
 
     match "blog/**" $ version "jsonld-meta" $ do
         -- override the url field to point to the base version

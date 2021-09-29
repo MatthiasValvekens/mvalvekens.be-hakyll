@@ -36,7 +36,8 @@
         <script>document.addEventListener('DOMContentLoaded', handleFragment);</script>
     </head>
     <body>
-        <section class="section transparent is-paddingless is-marginless">
+        <article class="transparent is-paddingless is-marginless">
+            <h1 class="is-sr-only">Matthias Valvekens</h1>
             <div class="container is-widescreen is-marginless is-paddingless is-centered is-max-desktop">
                 <div class="columns">
                     <div class="column is-6 shadowless is-paddingless is-gapless" style="margin-top: 0; margin-bottom: 0;">
@@ -80,12 +81,13 @@
                                 </li>
                             </ul>
                         </nav>
-                        <div class="content-tab box transparent" id="tab-home">
-                            <h1 class="title is-1 has-text-centered has-text-black-ter is-family-secondary" id="name">
-                                Matthias Valvekens </h1>
-                            <h2 class="subtitle is-6 has-text-centered has-text-weight-light">
+                        <section class="content-tab box transparent" id="tab-home">
+                            <h2 class="is-sr-only">Home</h2>
+                            <div class="title is-1 has-text-centered has-text-black-ter is-family-secondary" id="name">
+                                Matthias Valvekens </div>
+                            <div class="subtitle is-6 has-text-centered has-text-weight-light">
                                 Mathematician<br>Software developer
-                            </h2>
+                            </div>
                             <figure class="image is-128x128" style="margin-left: auto; margin-right: auto;">
                                 <img class="is-rounded has-background-white" style="border-width: thin; border-color: #ccc; border-style: solid;" src="/static/images/tegaki-matthias-128.png" alt="hand-drawn profile picture">
                             </figure>
@@ -106,25 +108,25 @@
                                     &#xA9; Archives of the Mathematisches Forschungsinstitut Oberwolfach
                                 </p>
                             </div>
-                        </div>
-                        <div class="content-tab box transparent is-hidden" id="tab-about-me">
-                            <h1 class="subtitle is-5 has-text-centered">
+                        </section>
+                        <section class="content-tab box transparent is-hidden" id="tab-about-me">
+                            <h2 class="subtitle is-5 has-text-centered">
                                 Summary
-                            </h1>
+                            </h2>
                             <div class="box is-shadowless has-text-centered">
                                 <a class="button is-rounded" href="/about.html" style="margin-bottom: 2rem;">
                                     Long-form version
                                 </a>
                             </div>
-                            <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
+                            <h3 class="subtitle is-6 has-text-centered has-text-weight-semibold">
                                 Current status
-                            </h2>
+                            </h3>
                             <p style="margin-bottom: 2rem;">
                                 $snippet("snippets/employment-history-summary.html")$
                             </p>
-                            <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
+                            <h3 class="subtitle is-6 has-text-centered has-text-weight-semibold">
                                 Technical skillset
-                            </h2>
+                            </h3>
                             <p style="margin-bottom: 1rem;">
                                 $snippet("snippets/interests.html")$
                             </p>
@@ -135,8 +137,8 @@
                             <p style="margin-bottom: 2rem;">
                                 I also have extensive experience with the Java ecosystem (including a couple of internships), and I've done some work in Haskell for smaller projects.
                             </p>
-                        </div>
-                        <div class="content-tab box transparent is-hidden" id="tab-publications">
+                        </section>
+                        <section class="content-tab box transparent is-hidden" id="tab-publications">
                             <h2 class="subtitle is-6 has-text-centered has-text-weight-semibold">
                                 Research articles
                             </h2>
@@ -144,15 +146,15 @@
                             <p class="has-text-centered" style="margin-top: 1rem;">
                                 For a more complete list of my mathematical work, see <a href="/about.html#research">Mathematical writings</a>.
                             </p>
-                        </div>
-                        <div class="content-tab box transparent is-hidden" id="tab-contact-me">
+                        </section>
+                        <section class="content-tab box transparent is-hidden" id="tab-contact-me">
                             <div class="box is-size-7" style="margin-bottom: 2rem;">
                                 $snippet("snippets/contact-info.html")$
                             </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
             </div>
-        </section>
+        </article>
     </body>
 </html>
