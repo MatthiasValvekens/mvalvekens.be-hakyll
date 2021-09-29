@@ -58,6 +58,12 @@ section.article-info {
     margin-bottom: 1em;
 }
 
+.blog-paras .youtube iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .blog-paras .tldr:before {
     content: "TL;DR";
     font-weight: bold;

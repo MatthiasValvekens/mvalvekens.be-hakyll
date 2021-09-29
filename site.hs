@@ -20,13 +20,20 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.Time as Time
 import qualified Data.Text as T
-import qualified Data.ByteString as BS
+import qualified Data.HashMap.Strict as HMS
+import Data.Text.Encoding (encodeUtf8, decodeUtf8)
 
-import Control.Monad (liftM, (>=>))
+import qualified Data.ByteString as BS
+import Data.ByteString.Lazy (toStrict)
+
+import Control.Monad (liftM, (>=>), msum)
 import Control.Monad.Identity (runIdentity)
 import System.FilePath (takeBaseName)
 
 import qualified GHC.IO.Encoding as E
+
+import qualified Data.Aeson as Aes
+import Data.Scientific (toBoundedInteger)
 
 
 --------------------------------------------------------------------------------
@@ -391,15 +398,67 @@ shiftAndStyleHeadings by (Header lvl attr content) = Header lvl' attr' content
           attr' = (elId, classes', kvals)
 shiftAndStyleHeadings _ x = x
 
+embedYoutubeVideos :: Block -> Compiler Block
+embedYoutubeVideos orig@(CodeBlock attr jsonMeta)
+    | not ("youtube" `elem` classes) = return orig
+    | otherwise = do
+        rawObj <- grabJson
+        width <- extractIntOrFail "width" rawObj
+        height <- extractIntOrFail "height" rawObj
+        title <- extractStringOrFail "name" rawObj
+        ytid <- extractPandocAttr "ytid" kvals
+        let videoUrl = "https://www.youtube.com/watch?v=" <> ytid
+        let embedUrl = "https://www.youtube-nocookie.com/embed/" <> ytid
+        let thumbnailUrl = "https://img.youtube.com/vi/" <> ytid <> "/maxresdefault.jpg"
+        let contentUrl = "https://youtube.googleapis.com/v/" <> ytid
+        let newObj = HMS.insert "embedUrl" (Aes.String embedUrl)
+                   $ HMS.insert "thumbnailUrl" (Aes.String thumbnailUrl)
+                   $ HMS.insert "contentUrl" (Aes.String contentUrl) rawObj
+        let ctx = constField "width" (show width) <> constField "height" (show height)
+                <> constField "embed-url" (T.unpack embedUrl)
+                <> constField "video-url" (T.unpack videoUrl)
+                <> constField "youtube-meta" (jsonString newObj)
+                <> constField "title" title
+        ytEmbedItem <- makeItem "" >>= loadAndApplyTemplate "templates/youtube-embed.html" ctx
+        let ytContent = RawBlock "html" $ T.pack $ itemBody ytEmbedItem
+        return $ Div (elId, classes, []) [ytContent]
+        
+    where (elId, classes, kvals) = attr
+          grabJson = do
+            case Aes.decodeStrict (encodeUtf8 jsonMeta) of
+                Nothing -> fail "JSON decoding failure"
+                Just (Aes.Object json) -> return json
+          jsonString = T.unpack . decodeUtf8 . toStrict . Aes.encode
+          extractIntOrFail :: T.Text -> Aes.Object -> Compiler Int
+          extractIntOrFail key obj = do
+            case HMS.lookup key obj of
+                Just (Aes.Number x) -> case toBoundedInteger x of
+                    Nothing -> fail "Expected int in JSON, got something else"
+                    Just x -> return x
+                _ -> fail $ "No numeric key " ++ T.unpack key ++ " in YouTube meta"
+          extractStringOrFail key obj = do
+            case HMS.lookup key obj of
+                Just (Aes.String x) -> return (T.unpack x)
+                _ -> fail $ "No string key " ++ T.unpack key ++ " in YouTube meta"
+
+embedYoutubeVideos orig = return orig
+
+
+extractPandocAttr :: T.Text -> [(T.Text, T.Text)] -> Compiler T.Text
+extractPandocAttr key kvals = case msum (trans <$> kvals) of
+        Nothing -> fail $ "No attribute value for '" ++ T.unpack key ++ "'."
+        Just x -> return x
+    where trans (k, v) = if k == key then (Just v) else Nothing
+
 
 pandocBlogPostCompiler :: Compiler (Item String)
 pandocBlogPostCompiler = do
         csl <- load $ fromFilePath "biblio/bibstyle.csl"
-        liftM processPandoc (getResourceBody >>= readPandocBiblioFromMeta ro csl)
+        getResourceBody >>= readPandocBiblioFromMeta ro csl >>= processPandoc
     where wo = defaultHakyllWriterOptions
           ro = defaultHakyllReaderOptions
             { -- The following option enables citation rendering
               readerExtensions = enableExtension Ext_citations $ readerExtensions defaultHakyllReaderOptions
             }
-          transform = runIdentity . (walkPandocM $ return . shiftAndStyleHeadings 1)
-          processPandoc = writePandocWith wo . fmap transform
+          transform = walkPandocM $ return . shiftAndStyleHeadings 1 >=> embedYoutubeVideos
+          processPandoc = withItemBody transform >=> return . writePandocWith wo

@@ -4,11 +4,12 @@
     </script>
     <h1 class="title blog-title has-text-centered">$title$</h1>
     <section class="article-info">
+        <h2 class="is-sr-only">Article info</h2>
         <p>
-        Posted on <time pubdate datetime="$date$">$date$</time>
+        Posted on <time datetime="$date$">$date$</time>
         $if(author)$
             <span itemscope itemtype="http://schema.org/Person">
-                by <span itemprop="author">$author$</span>
+                by <span itemprop="name">$author$</span>
             </span>
         $endif$
         </p>
