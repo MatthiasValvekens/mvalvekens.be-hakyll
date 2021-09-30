@@ -13,7 +13,6 @@ import qualified Text.Pandoc as Pandoc
 import qualified Text.Pandoc.Citeproc as Pandoc (processCitations)
 import Hakyll.Core.Compiler.Internal (compilerThrow)
 
-import Data.Monoid (mappend)
 import Data.Ord (comparing)
 import Data.List (sortBy, nub, intercalate, find)
 import Data.Maybe (fromMaybe)
@@ -23,7 +22,6 @@ import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HMS
 import Data.Text.Encoding (encodeUtf8, decodeUtf8)
 
-import qualified Data.ByteString as BS
 import Data.ByteString.Lazy (toStrict)
 
 import Control.Monad (liftM, (>=>), msum)
@@ -87,7 +85,7 @@ hakyllRules = do
                     <> copyrightContext
                     <> defaultContext
 
-            makeItem ""
+            makeItem ("" :: String)
                 >>= loadAndApplyTemplate "templates/about.html" aboutCtx
                 >>= loadAndApplyTemplate "templates/default.html" aboutCtx
 
@@ -100,7 +98,8 @@ hakyllRules = do
             let pages = specialPages ++ posts
             let rootCtx = constField "rootUrl" rootUrl
             let pgCtx = listField "pages" (rootCtx <> defaultContext) (return pages)
-            makeItem "" >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
+            makeItem ("" :: String)
+                >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
 
     -- Build tags and tag summary pages
     tags <- buildTags ("blog/**" .&&. hasNoVersion) (fromCapture tagPagePattern)
@@ -120,7 +119,7 @@ hakyllRules = do
                     <> keywordsContext
                     <> defaultContext
 
-            makeItem ""
+            makeItem ("" :: String)
                 >>= loadAndApplyTemplate "templates/tag-overview.html" ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
 
@@ -146,7 +145,7 @@ hakyllRules = do
         -- override the url field to point to the base version
         let ctx = field "abs-url" (absoluteUri . forBaseVer) 
                 <> field "url" (routeOrFail . forBaseVer) <> postCtx tags 
-        compile $ makeItem ""
+        compile $ makeItem ("" :: String)
             >>= loadAndApplyTemplate "templates/jsonld/article-info.json" ctx
 
     match "templates/**" $ compile templateBodyCompiler
@@ -159,19 +158,19 @@ hakyllRules = do
                     <> field "abs-url" (absoluteUri . tagPageFromSummary) 
                     <> listFieldWith "parts"  seriesPartContext (seriesParts tags)
                     <> defaultContext
-            compile $ makeItem "" 
+            compile $ makeItem ("" :: String)
                 >>= loadAndApplyTemplate "templates/jsonld/series-info.json" ctx
 
     matchMetadata "tag-summaries/*" isSeries $ version "series-ref" $ do
         let ctx = field "url" (routeOrFail . tagPageFromSummary)
                 <> field "abs-url" (absoluteUri . tagPageFromSummary) 
                 <> defaultContext
-        compile $ makeItem "" 
+        compile $ makeItem ("" :: String)
             >>= loadAndApplyTemplate "templates/jsonld/series-ref.json" ctx
 
     matchMetadata "tag-summaries/*" isSeries $ version "series-info" $ do
         let ctx = field "url" (routeOrFail . tagPageFromSummary) <> defaultContext
-        compile $ makeItem ""
+        compile $ makeItem ("" :: String)
             >>= loadAndApplyTemplate "templates/series-info.html" ctx
 
     match "about/*" $ compile $ do
@@ -186,11 +185,11 @@ hakyllRules = do
           tagPageFromSummary = fromCapture tagPagePattern . tagFromSummary
           seriesParts tags item = do
                 -- manually extract tag pattern from tagMap
-                let maybeIdents = snd <$> find pred (tagsMap tags)
+                let maybeIdents = snd <$> find predicate (tagsMap tags)
                 case maybeIdents of
                     Nothing -> fail "Failed to extract tag pattern"
                     Just idents -> chronological =<< loadAll (fromList idents)
-            where pred (tag, _) = tag == tagFromSummary item
+            where predicate (tag, _) = tag == tagFromSummary item
           seriesPartContext = field "abs-url" (absoluteUri . itemIdentifier) 
                             <> defaultContext
 
@@ -322,7 +321,7 @@ licInfo' :: String -> Maybe LicenseInfo
 licInfo' "CC BY-SA 4.0" = Just $ LicenseInfo
     { licenseSnippetId = "snippets/copyright/cc-by-sa-4.0.html"
     , licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/" }
-licInfo' x = Nothing
+licInfo' _ = Nothing
 
 licenseInfo :: Identifier -> Compiler LicenseInfo
 licenseInfo ident = do
@@ -390,11 +389,43 @@ shiftAndStyleHeadings by (Header lvl attr content) = Header lvl' attr' content
           attr' = (elId, classes', kvals)
 shiftAndStyleHeadings _ x = x
 
+
+grabJsonObj :: T.Text -> Compiler Aes.Object
+grabJsonObj json = do
+    case Aes.decodeStrict (encodeUtf8 json) of
+        Just (Aes.Object jsonObj) -> return jsonObj
+        Just _ -> fail "JSON type error: expected object"
+        Nothing -> fail "JSON decoding failure"
+
+jsonString :: Aes.ToJSON a => a -> String
+jsonString = T.unpack . decodeUtf8 . toStrict . Aes.encode
+
+
+formatInlineMetadata :: Block -> Compiler Block
+formatInlineMetadata orig@(CodeBlock attr jsonMeta)
+    | not ("meta" `elem` classes) = return orig
+    | elId == "" = fail "Inline metadata must have an ID"
+    | otherwise = do
+        rawObj <- grabJsonObj jsonMeta
+        currentUrl <- getUnderlying >>= routeOrFail
+        let defaultId = T.pack (rootUrl ++ currentUrl) <> "#" <> elId
+        let newObj = insertDefault "@id" (Aes.String defaultId) rawObj
+        let ctx = constField "jsonld-meta" (jsonString newObj)
+        metaItem <- makeItem ("" :: String) 
+                        >>= loadAndApplyTemplate templateName ctx
+        return $ RawBlock "html" $ T.pack $ itemBody metaItem
+    where (elId, classes, _) = attr
+          insertDefault k defaultVal = HMS.alter (Just . fromMaybe defaultVal) k
+          templateName = "templates/jsonld/jsonld-meta.html"
+
+formatInlineMetadata orig = return orig
+
+
 embedYoutubeVideos :: Block -> Compiler Block
 embedYoutubeVideos orig@(CodeBlock attr jsonMeta)
     | not ("youtube" `elem` classes) = return orig
     | otherwise = do
-        rawObj <- grabJson
+        rawObj <- grabJsonObj jsonMeta
         width <- extractIntOrFail "width" rawObj
         height <- extractIntOrFail "height" rawObj
         title <- extractStringOrFail "name" rawObj
@@ -411,22 +442,18 @@ embedYoutubeVideos orig@(CodeBlock attr jsonMeta)
                 <> constField "video-url" (T.unpack videoUrl)
                 <> constField "youtube-meta" (jsonString newObj)
                 <> constField "title" title
-        ytEmbedItem <- makeItem "" >>= loadAndApplyTemplate "templates/youtube-embed.html" ctx
+        ytEmbedItem <- makeItem ("" :: String) >>= loadAndApplyTemplate templateName ctx
         let ytContent = RawBlock "html" $ T.pack $ itemBody ytEmbedItem
         return $ Div (elId, classes, []) [ytContent]
         
     where (elId, classes, kvals) = attr
-          grabJson = do
-            case Aes.decodeStrict (encodeUtf8 jsonMeta) of
-                Nothing -> fail "JSON decoding failure"
-                Just (Aes.Object json) -> return json
-          jsonString = T.unpack . decodeUtf8 . toStrict . Aes.encode
+          templateName = "templates/youtube-embed.html" 
           extractIntOrFail :: T.Text -> Aes.Object -> Compiler Int
           extractIntOrFail key obj = do
             case HMS.lookup key obj of
                 Just (Aes.Number x) -> case toBoundedInteger x of
                     Nothing -> fail "Expected int in JSON, got something else"
-                    Just x -> return x
+                    Just y -> return y
                 _ -> fail $ "No numeric key " ++ T.unpack key ++ " in YouTube meta"
           extractStringOrFail key obj = do
             case HMS.lookup key obj of
@@ -452,5 +479,6 @@ pandocBlogPostCompiler = do
             { -- The following option enables citation rendering
               readerExtensions = enableExtension Ext_citations $ readerExtensions defaultHakyllReaderOptions
             }
-          transform = walkPandocM $ return . shiftAndStyleHeadings 1 >=> embedYoutubeVideos
+          transform = walkPandocM $ return . shiftAndStyleHeadings 1 
+                        >=> embedYoutubeVideos >=> formatInlineMetadata
           processPandoc = withItemBody transform >=> return . writePandocWith wo
