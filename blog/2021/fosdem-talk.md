@@ -50,28 +50,52 @@ For further information, visit [the talk's info page](https://fosdem.org/2021/sc
     "@id": "https://fosdem.org/2021/schedule/event/safety_opensource_doc_security_pdf/#talk",
     "url": "https://fosdem.org/2021/schedule/event/safety_opensource_doc_security_pdf/",
     "name": "FOSDEM 2021 - Document security and digital signatures in PDF",
+    "eventStatus": "https://schema.org/EventMovedOnline",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "description": "The push for paperless bureaucracy has been going on for quite some time, but the circumstances of the past year made the issue even more pressing than it already was. The PDF specification outlines a number of security features, including but not limited to encryption, digital signatures and redaction support. The goal of this talk is to give a broad overview of the various security mechanisms provided by the PDF standard and their applications in the real world, with a particular focus on digital signing.",
+    "location": {
+      "@type": "VirtualLocation",
+      "url": "https://chat.fosdem.org/#/room/#safety:fosdem.org"
+    },
     "performer": {
+        "@id": "https://mvalvekens.be/about.html#me",
         "@type": "Person",
-        "url": "https://mvalvekens.be/about.html",
         "name": "Matthias Valvekens"
     },
+    "offers": {
+        "@type": "Offer",
+        "url": "https://live.fosdem.org/watch/dsafety",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2021-02-06T11:45:00+01:00"
+    },
+    "organizer": { "@id": "https://fosdem.org#org" },
     "startDate": "2021-02-06T11:45:00+01:00",
     "endDate": "2021-02-06T12:45:00+01:00",
-    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
     "superEvent": {
         "@type": "Event",
         "@id": "https://fosdem.org/2021/#event",
         "name": "FOSDEM 2021",
+        "description": "FOSDEM 2021 edition (virtual)",
         "url": "https://fosdem.org/2021/",
+        "location": {
+          "@type": "VirtualLocation",
+          "url": "https://chat.fosdem.org/"
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": "https://fosdem.org/2021/live/",
+            "price": "0",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock",
+            "validFrom": "2021-02-06T00:00:00+01:00"
+        },
         "startDate": "2021-02-06T00:00:00+01:00",
         "endDate": "2021-02-07T23:59:59+01:00",
+        "eventStatus": "https://schema.org/EventMovedOnline",
         "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-        "organizer": {
-          "@type": "Organization",
-          "@id": "https://fosdem.org#org",
-          "name": "FOSDEM",
-          "url": "https://fosdem.org"
-        }
+        "organizer": { "@id": "https://fosdem.org#org" }
     }
   }
 }
