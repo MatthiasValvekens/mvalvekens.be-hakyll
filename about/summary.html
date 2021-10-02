@@ -6,12 +6,81 @@ order: 1
 ---
 
 <script type="application/ld+json" id="me">
-    {
-        "@context": "https://schema.org",
-        "@id": "https://mvalvekens.be/about.html#me",
-        "@type": "Person",
-        "name": "Matthias Valvekens"
+{
+    "@context": "https://schema.org",
+    "@id": "https://mvalvekens.be/about.html#me",
+    "@type": "Person",
+    "name": "Matthias Valvekens",
+    "knowsLanguage": ["nl", "en", "ja", "fr"],
+    "alumniOf": {
+        "@type": "OrganizationRole",
+        "alumniOf" :{
+            "@type": "EducationalOrganization",
+            "name": "Department of Mathematics",
+            "@id": "https://wis.kuleuven.be/#org",
+            "url": "https://wis.kuleuven.be/",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Leuven",
+                "addressCountry": "Belgium",
+                "postalCode": "3001",
+                "streetAddress": "Celestijnenlaan 200B"
+            },
+            "parentOrganization": {
+                "@type": "CollegeOrUniversity",
+                "name": "KU Leuven",
+                "@id": "https://kuleuven.be/#org",
+                "url": "https://kuleuven.be/",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Leuven",
+                    "addressCountry": "Belgium",
+                    "postalCode": "3000",
+                    "streetAddress": "Oude Markt 13 - Bus 5500"
+                }
+            }
+        },
+        "startDate": "2016"
+    },
+    "worksFor": [
+        {
+            "@type": "EmployeeRole",
+            "worksFor": {
+                "@type": "Organization",
+                "@id": "https://wis.kuleuven.be/#org"
+            },
+            "startDate": "2016-09-01",
+            "endDate": "2020-08-31",
+            "roleName": "PhD researcher"
+        },
+        {
+            "@type": "EmployeeRole",
+            "worksFor": {
+                "@type": "Organization",
+                "@id": "https://itextpdf.com",
+                "name": "iTextPDF",
+                "url": "https://itextpdf.com"
+            },
+            "startDate": "2020-09-21",
+            "roleName": "Research Engineer"
+        }
+    ],
+    "memberOf": {
+        "@type": "OrganizationRole",
+        "memberOf": {
+            "@type": "Organization",
+            "name": "ISO/TC 171/SC 2",
+            "url": "https://www.iso.org/committee/53674.html",
+            "parentOrganization": {
+                "@type": "Organization",
+                "name": "ISO",
+                "url": "https://www.iso.org/"
+            }
+        },
+        "startDate": "2021",
+        "roleName": "Subject Matter Expert"
     }
+}
 </script>
 <div class="box is-shadowless has-text-centered" style="margin-bottom: 2rem;">
     <a class="button is-rounded" href="/static/misc/&#x76;&#x63;&#x61;&#x72;&#x64;&#x2E;&#x76;&#x63;&#x66;" style="margin-right: 2rem;">
