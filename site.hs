@@ -32,6 +32,7 @@ import qualified GHC.IO.Encoding as E
 import qualified Data.Aeson as Aes
 import Data.Scientific (toBoundedInteger)
 
+import Debug.Trace
 
 --------------------------------------------------------------------------------
 
@@ -76,12 +77,13 @@ hakyllRules = do
     create ["about.html"] $ do
         route idRoute
         compile $ do
-            sections <- sortByMetadata "order" =<< loadAll "about/*"
+            sections <- sortByMetadata "order" =<< loadAll "about/*.html"
 
             let aboutSecCtx = iconContext <> labelContext <> defaultContext
             let aboutCtx 
                     = listField "about-sections" aboutSecCtx (return sections)
                     <> constField "title" "About Me"
+                    <> field "extrastyle" (const $ loadBody "about/style.css")
                     <> copyrightContext
                     <> defaultContext
 
@@ -173,8 +175,11 @@ hakyllRules = do
         compile $ makeItem ("" :: String)
             >>= loadAndApplyTemplate "templates/series-info.html" ctx
 
-    match "about/*" $ compile $ do
-        getResourceBody >>= applyAsTemplate snippetField
+    match projInfoPattn $ fmap traceShowId (compile projectInfoCompiler)
+    match "about/*.html" $ compile $ do
+        let ctx = snippetField <> functionField "projectinfo" projInfo
+        getResourceBody >>= applyAsTemplate ctx
+    match "about/*.css" $ compile compressCssCompiler
     match "biblio/*.csl" $ compile cslCompiler
     match "biblio/*.csl" $ version "biblio-publish" $ do
         route (gsubRoute "biblio/" (const "static/biblio/"))
@@ -192,6 +197,12 @@ hakyllRules = do
             where predicate (tag, _) = tag == tagFromSummary item
           seriesPartContext = field "abs-url" (absoluteUri . itemIdentifier) 
                             <> defaultContext
+          projInfo :: [String] -> Item a -> Compiler String
+          projInfo [projId] _ = loadBody (fromCapture projInfoPattn projId)
+          projInfo _ _ = fail "Wrong number of arguments to projectinfo()"
+
+          projInfoPattn :: Pattern
+          projInfoPattn = "about/projects/*.md" 
 
 
 --------------------------------------------------------------------------------
@@ -204,7 +215,6 @@ tagPagePattern = "tags/*.html"
 
 tagSummaryId :: String -> Identifier
 tagSummaryId tag = fromFilePath $ "tag-summaries/" ++ tag ++ ".md"
-
 
 getStringFromMeta :: String -> Identifier -> Compiler String
 getStringFromMeta entryKey ident = do
@@ -404,19 +414,22 @@ jsonString = T.unpack . decodeUtf8 . toStrict . Aes.encode
 formatInlineMetadata :: Block -> Compiler Block
 formatInlineMetadata orig@(CodeBlock attr jsonMeta)
     | not ("meta" `elem` classes) = return orig
-    | elId == "" = fail "Inline metadata must have an ID"
     | otherwise = do
-        rawObj <- grabJsonObj jsonMeta
-        currentUrl <- getUnderlying >>= routeOrFail
-        let defaultId = T.pack (rootUrl ++ currentUrl) <> "#" <> elId
-        let newObj = insertDefault "@id" (Aes.String defaultId) rawObj
-        let ctx = constField "jsonld-meta" (jsonString newObj)
+        json <- grabJsonObj jsonMeta >>= insertDefault "@id" defaultId
+        let ctx = constField "jsonld-meta" (jsonString json)
         metaItem <- makeItem ("" :: String) 
                         >>= loadAndApplyTemplate templateName ctx
         return $ RawBlock "html" $ T.pack $ itemBody metaItem
     where (elId, classes, _) = attr
-          insertDefault k defaultVal = HMS.alter (Just . fromMaybe defaultVal) k
+          insertDefault k defaultVal = HMS.alterF alter k
+            where alter Nothing = Just <$> defaultVal
+                  alter (Just x) = return (Just x)
           templateName = "templates/jsonld/jsonld-meta.html"
+          defaultId = do
+            if elId == "" then fail "Inline metadata must have an ID" else pure ()
+            currentUrl <- getUnderlying >>= routeOrFail
+            return $ Aes.String (T.pack (rootUrl ++ currentUrl) <> "#" <> elId)
+            
 
 formatInlineMetadata orig = return orig
 
@@ -482,3 +495,16 @@ pandocBlogPostCompiler = do
           transform = walkPandocM $ return . shiftAndStyleHeadings 1 
                         >=> embedYoutubeVideos >=> formatInlineMetadata
           processPandoc = withItemBody transform >=> return . writePandocWith wo
+
+
+projectInfoCompiler :: Compiler (Item String)
+projectInfoCompiler = pandocCompilerWithTransformM ro wo transform
+    where wo = defaultHakyllWriterOptions
+          ro = defaultHakyllReaderOptions
+          transform = walkPandocM $ formatInlineMetadata >=> formatTitle
+          formatTitle (Header 1 (_, classes, _) content) = do
+                ident <- getUnderlying
+                projectUrl <- T.pack <$> getStringFromMeta "project-url" ident
+                title <- T.pack <$> getStringFromMeta "title" ident
+                return $ Header 2 ("", classes, []) [Link ("", [], []) content (projectUrl, title)]
+          formatTitle x = return x
