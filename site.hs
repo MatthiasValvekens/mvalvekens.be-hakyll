@@ -32,8 +32,6 @@ import qualified GHC.IO.Encoding as E
 import qualified Data.Aeson as Aes
 import Data.Scientific (toBoundedInteger)
 
-import Debug.Trace
-
 --------------------------------------------------------------------------------
 
 unminifiedCss :: Pattern
@@ -175,7 +173,7 @@ hakyllRules = do
         compile $ makeItem ("" :: String)
             >>= loadAndApplyTemplate "templates/series-info.html" ctx
 
-    match projInfoPattn $ fmap traceShowId (compile projectInfoCompiler)
+    match projInfoPattn $ compile projectInfoCompiler
     match "about/*.html" $ compile $ do
         let ctx = snippetField <> functionField "projectinfo" projInfo
         getResourceBody >>= applyAsTemplate ctx
