@@ -32,3 +32,5 @@ The primary key's fingerprint is this one:
 ```
 
 My [new key is available online](/static/misc/matthias-gpg.asc), signed with the old one. I've also uploaded [my old key signed with my new one](/static/misc/matthias-gpg-rsa-cross-sign-revoked.asc), together with a revocation certificate indicating the reason for revocation as "key superseded".
+
+I will soon make a separate post to re-commit to a number of important signatures made using my old key using the new one.
