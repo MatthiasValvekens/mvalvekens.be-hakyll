@@ -1,0 +1,90 @@
+---
+title: "Refreshing some Git signatures"
+author: "Matthias Valvekens"
+tags: [digsig, pgp]
+published: 2021-11-28
+---
+
+As promised in [my earlier post about my new PGP key](pgp-key-rotated.html), I'm going to re-commit to a bunch of Git tag signatures in bulk, by signing a list of (tag, commit hash) pairs. See below.
+
+
+# Signed statement
+
+
+```
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Here's a list of GitHub commit tags (and the corresponding hashes) that were signed using my old PGP key.
+
+By signing this statement using my new PGP key, I'm continuing the chain of trust with respect to the new key.
+
+The signature is timestamped using an RFC 3161 time stamp token stored in a separate file.
+
+
+pyHanko release tags
+- --------------------
+
+  - `0.1.0` --- `e073ba45b9f7c9018dc9d9d763719b6f6e778d21`
+  - `0.2.0` --- `c6321407a9554b4e5e6f184d9d7cc5d8093965ab`
+  - `0.3.0` --- `ecc63541e7d7932b3dba58567023b19f0d159501`
+  - `0.4.0` --- `ced08e9d0b1abdb44027075ba9155e15094252fb`
+  - `0.5.0` --- `b840ca335cde9f2a2063328770fa05f9598dcee3`
+  - `0.5.1` --- `2d07a737b9d3895c55cb68637f515f6fe1ff8bb7`
+  - `0.6.0` --- `44646bf06cc6a8337c5712a6f2fb138bc88a67b0`
+  - `0.6.1` --- `8f7ecab3fd70028f6bdf7386472b0c65f6887e86`
+  - `0.7.0` --- `3e5edefe89b93c5eadb4be6108b7d2b8cec7d2dd`
+  - `0.8.0` --- `594f8f0ef361d1996f82ebe2e2d3297a44492713`
+  - `0.9.0` --- `6ba632c93963db9040d5029bb5e71e169f0f2073`
+  - `0.10.0` --- `34e6f191f1b2ea4e05b48762c3dac38c73a72285`
+
+
+
+pyhanko-certvalidator release tags
+- ----------------------------------
+
+  - `0.12.0` --- `cc4941c27241ca32adbe2beb8fcfc00896f16739`
+  - `0.12.1` --- `12916d38ae17724b3d202dc263d970b46544cea4`
+  - `0.13.0` --- `86158401d4e20423fc423659a0f0bcfdf40596ad`
+  - `0.13.1` --- `fae1e4d80c1e2eb0512b50ff8d9da4d318e260aa`
+  - `0.14.0` --- `0ff5a0fd5fb4e738b079333179e92817d7ae9abe`
+  - `0.14.1` --- `37325778bb38d69197acc93ba780b3bea9c47de5`
+  - `0.15.0` --- `9aabfafa5541b2fcf31e6b8d289c7a7a8601a0f8`
+  - `0.15.1` --- `8d4ff4106bb79828b546111c8bd95c69b32a1985`
+  - `0.15.2` --- `bbdfeb47bf239a77f58a42a56aa88b5fece30dda`
+  - `0.15.3` --- `01474d91da9150c51dd4181afa46c34fca17ae18`
+  - `0.16.0` --- `e1e6f5f2af7a7d807933818b6afc9826a136c5b0`
+  - `0.17.0` --- `13ce7fad3c766ed4ea2d552a45d6d60b508e6f23`
+  - `0.17.1` --- `05fda03c04f14c708d9b5197111133c4b31e8b05`
+  - `0.17.2` --- `17616694ecee79ccc90b20ff63f0b392b1713add`
+  - `0.17.3` --- `f8bfc65b5f1e43bf19121a397b2543d8f33a678c`
+  - `0.17.4` --- `0cc423a41e3b3870024cddb62871402b1d6b839b`
+
+
+
+Certomancer release tags
+- ------------------------
+
+  - `0.1.0` --- `ece75355dc6ed2da4952ec6ef708b7fb2195221a`
+  - `0.1.1` --- `1c11536643130db4a8ff5bbaf2ef8e6c739c58fb`
+  - `0.2.0` --- `c01ce2f54f7c96d5c71d4069e1368d06e2a518d4`
+  - `0.3.0` --- `903c86fbc4bd3b6e76a18d25488e8cb53e4e6d98`
+  - `0.4.0` --- `f6f2a6b7d981a237fd4c5f03c1b79f6c72a3dbb6`
+  - `0.5.0` --- `f1a50582c9d15c1c67f2710237c5ed9d55795696`
+  - `0.6.0` --- `a8fb1424aefb18ca69d6e9c7b61952c1853c450c`
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQScQUTzXnQsiKXSVjwV9CvvoVm6VAUCYaO93AAKCRAV9CvvoVm6
+VObAAP40DoF+BHWOg01q0GPnE6TwW6xxuh6CSG9iE6G+gJMyeQEAsq/4ke3NXa4/
+kFkJcS0YeRQ9CdHccupqa3u6tdAfXwY=
+=Gx9b
+-----END PGP SIGNATURE-----
+```
+
+
+# Links
+
+ - [Download the statement as a clearsigned PGP document](/static/misc/key-rotation-statement.md.asc).
+ - [Download an RFC 3161 timestamp of the above clearsigned PGP document](/static/misc/key-rotation-statement.md.asc.tst.der).
+ - Key fingerprints and public key files are listed in [the announcement post from last week](pgp-key-rotated.html).
+
