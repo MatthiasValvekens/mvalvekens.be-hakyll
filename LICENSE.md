@@ -1,5 +1,7 @@
 # Notes
 
+Copyright (c) 2020-2022 Matthias Valvekens
+
 The material in this repository is diverse, and so is the applicable licensing.
 
  - The Haskell code, build configuration, shell scripts, CSS and custom JavaScript is licensed under the AGPLv3 (see below), unless indicated otherwise.
