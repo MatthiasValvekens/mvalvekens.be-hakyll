@@ -19,3 +19,7 @@
     /* Bulma sets 6rem, which is too much. */
     padding-bottom: 3rem;
 }
+
+.link-list li:not(:last-child) {
+    margin-bottom: 1ex;
+}
