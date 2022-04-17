@@ -1,7 +1,7 @@
 ---
 title: "Using KeePassXC as a credential manager for sudoed Docker"
 author: "Matthias Valvekens"
-tags: [devops, docker, security]
+tags: [devops, docker, security, tech]
 published: 2022-04-17
 ---
 
