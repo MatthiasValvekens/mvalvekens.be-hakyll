@@ -23,7 +23,7 @@ On my system, this turned out to be a bit more tricky than I expected.
 [credstore]: https://docs.docker.com/engine/reference/commandline/login/#credentials-store
 
 
-# Setting up a KeePassXC as a credential store
+# Setting up KeePassXC as a credential store
 
 Since I already use [KeePassXC](https://keepassxc.org/) as my password manager of choice, I was of course very keen to figure out a way to get Docker to use that as its credential backend.
 Fortunately, KeePassXC integrates natively with [the freedesktop.org secrets API][secrets-api], also known as the "Secret Service" API. Essentially, this API defines a generic protocol for applications to talk to credential stores over a DBus session.
