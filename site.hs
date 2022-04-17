@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings, TupleSections #-}
 
+
 import Hakyll
 
 import Text.Pandoc.Definition
@@ -322,12 +323,12 @@ data LicenseInfo = LicenseInfo
     { licenseSnippetId :: Identifier
     , licenseUrl :: String }
 
--- TODO add a template for CC BY-SA content with differently 
--- licensed code snippets
--- (I don't want to accidentally require CC compliance for code)
 licInfo' :: String -> Maybe LicenseInfo
 licInfo' "CC BY-SA 4.0" = Just $ LicenseInfo
     { licenseSnippetId = "snippets/copyright/cc-by-sa-4.0.html"
+    , licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/" }
+licInfo' "CC BY-SA 4.0 hybrid" = Just $ LicenseInfo
+    { licenseSnippetId = "snippets/copyright/cc-by-sa-4.0-code-apache.html"
     , licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/" }
 licInfo' _ = Nothing
 
