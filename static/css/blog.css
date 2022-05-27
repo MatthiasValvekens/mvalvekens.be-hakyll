@@ -45,6 +45,19 @@ section.article-info {
     margin-bottom: 1em;
 }
 
+.blog-paras .info:before {
+    content: "Info";
+    font-weight: bold;
+    font-variant: small-caps;
+}
+
+.blog-paras .info {
+    border-radius: 1em;
+    background-color: #eaeff2;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
 .blog-paras .warning:before {
     content: "Warning";
     font-weight: bold;

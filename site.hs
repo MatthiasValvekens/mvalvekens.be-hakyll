@@ -9,6 +9,8 @@ import Text.Pandoc.Walk (walkPandocM)
 import Text.Pandoc 
     ( Extension (..)
     , ReaderOptions (..)
+    , WriterOptions (..)
+    , HTMLMathMethod (..)
     , enableExtension )
 import qualified Text.Pandoc as Pandoc
 import qualified Text.Pandoc.Citeproc as Pandoc (processCitations)
@@ -149,6 +151,19 @@ hakyllRules = do
         compile $ makeItem ("" :: String)
             >>= loadAndApplyTemplate "templates/jsonld/article-info.json" ctx
 
+    -- offer mathjax alternative for browsers that don't support MathML
+    -- (looking at you, Chromium derivatives)
+    matchMetadata "blog/**" usesMath $ version "mathjax" $ do
+        route $ setExtension "mathjax.html"
+        let ctx = field "article-meta" jsonldMetaForItem
+                <> constField "mathjax" "true"
+                <> field "url" (routeOrFail . forBaseVer)
+                <> postCtx tags
+        let wo = defaultHakyllWriterOptions { writerHTMLMathMethod = MathJax "" }
+        compile $ pandocBlogPostCompiler' wo
+            >>= loadAndApplyTemplate "templates/post.html" ctx 
+            >>= loadAndApplyTemplate "templates/default.html" ctx
+
     match "templates/**" $ compile templateBodyCompiler
     match "snippets/**" $ compile getResourceBody
     -- these templates contain just the summary text; they're optional
@@ -184,6 +199,7 @@ hakyllRules = do
         route (gsubRoute "biblio/" (const "static/biblio/"))
         compile copyFileCompiler
     where isSeries meta = lookupString "series" meta == Just "true"
+          usesMath meta = lookupString "math" meta == Just "true"
           forBaseVer = setVersion Nothing . itemIdentifier
           tagFromSummary = takeBaseName . toFilePath . itemIdentifier
           tagPageFromSummary = fromCapture tagPagePattern . tagFromSummary
@@ -264,10 +280,18 @@ seriesPartCtx = field "series-meta" getSeriesMeta
              let tsi = tagSummaryId seriesTag
              loadBody (setVersion (Just "series-info") tsi)
 
+
+mathCtx :: Context String
+mathCtx = fieldFromItemMeta "math"
+        <> field "mathjax-ver-url" (routeOrFail . mathjax . itemIdentifier)
+  where mathjax = setVersion (Just "mathjax")
+
+
 postCtx :: Tags -> Context String
 postCtx tags =  tagsField "tags" tags 
              -- Use the One True Date Order (YYYY-mm-dd)
              <> dateField "date" "%F" 
+             <> mathCtx
              <> seriesPartCtx
              <> keywordsContext
              <> copyrightContext
@@ -482,18 +506,22 @@ extractPandocAttr key kvals = case msum (trans <$> kvals) of
     where trans (k, v) = if k == key then (Just v) else Nothing
 
 
-pandocBlogPostCompiler :: Compiler (Item String)
-pandocBlogPostCompiler = do
+pandocBlogPostCompiler' :: WriterOptions -> Compiler (Item String)
+pandocBlogPostCompiler' wo = do
         csl <- load $ fromFilePath "biblio/bibstyle.csl"
         getResourceBody >>= readPandocBiblioFromMeta ro csl >>= processPandoc
-    where wo = defaultHakyllWriterOptions
-          ro = defaultHakyllReaderOptions
+    where ro = defaultHakyllReaderOptions
             { -- The following option enables citation rendering
               readerExtensions = enableExtension Ext_citations $ readerExtensions defaultHakyllReaderOptions
             }
           transform = walkPandocM $ return . shiftAndStyleHeadings 1 
                         >=> embedYoutubeVideos >=> formatInlineMetadata
           processPandoc = withItemBody transform >=> return . writePandocWith wo
+
+
+pandocBlogPostCompiler :: Compiler (Item String)
+pandocBlogPostCompiler = pandocBlogPostCompiler' wo
+  where wo = defaultHakyllWriterOptions { writerHTMLMathMethod = MathML }
 
 
 projectInfoCompiler :: Compiler (Item String)

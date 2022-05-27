@@ -19,6 +19,26 @@
         $if(series)$ $series$ $endif$
     </section>
     <section class="section blog-paras">
+        $if(math)$
+          <aside class="info">
+            <p>
+            This post features embedded mathematical expressions.
+            $if(mathjax)$
+                You are currently viewing a version that relies on MathJax
+                loaded from a CDN.
+                If your browser has native MathML support, or you prefer
+                browsing without enabling JavaScript, you may want to read
+                <a href="$url$">the MathML version</a> instead.
+            $else$
+                By default, those are rendered as MathML syntax.
+                If your browser doesn't support MathML, please take a look at
+                <a href="$mathjax-ver-url$">
+                  the alternative MathJax-based version
+                </a> instead.
+            $endif$
+            </p>
+          </aside>
+        $endif$
         $body$
     </section>
 </article>
