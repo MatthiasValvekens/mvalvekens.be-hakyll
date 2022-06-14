@@ -96,7 +96,7 @@ hakyllRules = do
     create ["sitemap.xml"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll ("blog/**" .&&. hasNoVersion)
+            posts <- recentFirst =<< loadAll ("blog/**/*.md" .&&. hasNoVersion)
             specialPages <- loadAll (fromList ["about.html", "contact.html", "blog.html"])
             let pages = specialPages ++ posts
             let rootCtx = constField "rootUrl" rootUrl
@@ -105,7 +105,7 @@ hakyllRules = do
                 >>= loadAndApplyTemplate "templates/sitemap.xml" (rootCtx <> pgCtx)
 
     -- Build tags and tag summary pages
-    tags <- buildTags ("blog/**" .&&. hasNoVersion) (fromCapture tagPagePattern)
+    tags <- buildTags ("blog/**/*.md" .&&. hasNoVersion) (fromCapture tagPagePattern)
     -- this generates the actual tag summary pages
     tagsRules tags $ \tag pattern -> do
         route idRoute
@@ -126,25 +126,31 @@ hakyllRules = do
                 >>= loadAndApplyTemplate "templates/tag-overview.html" ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
 
-    match "blog.html" $ do
+    blogPagination <- do
+        let grp = liftM (paginateEvery 5) . sortRecentFirst
+        buildPaginateWith grp ("blog/**/*.md" .&&. hasNoVersion) blogPageId
+
+    paginateRules blogPagination $ \page pattern -> do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll ("blog/**" .&&. hasNoVersion)
-            let ctx = listField "posts" (postCtx tags) (return posts)
+            posts <- recentFirst =<< loadAll pattern
+            let ctx = constField "title" "Blog"
+                    <> listField "posts" postCtxNoTags (return posts)
+                    <> radialPaginationContext 2 blogPagination page
                     <> copyrightContext
                     <> defaultContext
-            getResourceBody
-                >>= applyAsTemplate ctx
+            makeItem ("" :: String)
+                >>= loadAndApplyTemplate "templates/post-list.html" ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
 
-    match "blog/**" $ do
+    match "blog/**/*.md" $ do
         route $ setExtension "html"
         let ctx = field "article-meta" jsonldMetaForItem <> postCtx tags
         compile $ pandocBlogPostCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx 
             >>= loadAndApplyTemplate "templates/default.html" ctx
 
-    match "blog/**" $ version "jsonld-meta" $ do
+    match "blog/**/*.md" $ version "jsonld-meta" $ do
         -- override the url field to point to the base version
         let ctx = field "abs-url" (absoluteUri . forBaseVer) 
                 <> field "url" (routeOrFail . forBaseVer) <> postCtx tags 
@@ -153,7 +159,7 @@ hakyllRules = do
 
     -- offer mathjax alternative for browsers that don't support MathML
     -- (looking at you, Chromium derivatives)
-    matchMetadata "blog/**" usesMath $ version "mathjax" $ do
+    matchMetadata "blog/**/*.md" usesMath $ version "mathjax" $ do
         route $ setExtension "mathjax.html"
         let ctx = field "article-meta" jsonldMetaForItem
                 <> constField "mathjax" "true"
@@ -218,6 +224,10 @@ hakyllRules = do
 
           projInfoPattn :: Pattern
           projInfoPattn = "about/projects/*.md" 
+
+          blogPageId :: PageNumber -> Identifier
+          blogPageId 1 = "blog.html"
+          blogPageId n = fromFilePath $ "blog/pagelist/" ++ show n ++ ".html"
 
 
 --------------------------------------------------------------------------------
@@ -287,15 +297,17 @@ mathCtx = fieldFromItemMeta "math"
   where mathjax = setVersion (Just "mathjax")
 
 
-postCtx :: Tags -> Context String
-postCtx tags =  tagsField "tags" tags 
-             -- Use the One True Date Order (YYYY-mm-dd)
-             <> dateField "date" "%F" 
+postCtxNoTags :: Context String
+-- Use the One True Date Order (YYYY-mm-dd)
+postCtxNoTags = dateField "date" "%F" 
              <> mathCtx
              <> seriesPartCtx
              <> keywordsContext
              <> copyrightContext
              <> defaultContext
+
+postCtx :: Tags -> Context String
+postCtx tags =  tagsField "tags" tags <> postCtxNoTags
 
 iconContext :: Context String
 iconContext = fieldFromItemMeta "icon"
@@ -535,3 +547,45 @@ projectInfoCompiler = pandocCompilerWithTransformM ro wo transform
                 title <- T.pack <$> getStringFromMeta "title" ident
                 return $ Header 2 ("", classes, []) [Link ("", [], []) content (projectUrl, title)]
           formatTitle x = return x
+
+
+data PageNumInfo = PageNumInfo 
+                 { pniGetPageNum :: PageNumber
+                 , pniGetPageUrl :: String }
+
+radialPaginationContext :: PageNumber -> Paginate -> PageNumber -> Context a
+radialPaginationContext rad p curPage = paginateContext p curPage 
+                                      <> before <> after
+    where -- for each number, build the URL to the page using getRoute
+          pgNumItem :: PageNumber -> Compiler (Item PageNumInfo)
+          pgNumItem n = do
+            maybeRoute <- getRoute (paginateMakeId p n)
+            case maybeRoute of
+                Nothing -> fail $ "Couldn't retrieve URL for page " ++ show n
+                Just rt -> makeItem $ PageNumInfo n (toUrl rt)
+
+          -- turn a PageNumInfo into template fields
+          pgNumCtx :: Context PageNumInfo
+          pgNumCtx = field "pageNum" fmtPgNum <> field "pageUrl" fmtPgUrl
+            where fmtPgNum = return . show . pniGetPageNum . itemBody
+                  fmtPgUrl = return . pniGetPageUrl . itemBody
+          lastPageNum = Map.size $ paginateMap p
+          seqOrNoResult [] = noResult "No pages"
+          seqOrNoResult xs = sequence xs
+          before = pgsField <> elide
+            where pgsField = listField "pagesBefore" pgNumCtx (seqOrNoResult pgs)
+                  fstInSet = max 2 (curPage - rad)
+                  elide = field "elideBefore" $ const $ do
+                    case fstInSet > 2 && not (null pgs) of
+                        True -> return "elide"
+                        False -> noResult "no ellipsis"
+                  pgs = [pgNumItem n | n <- [fstInSet .. curPage - 1]]
+          after = pgsField <> elide
+            where pgsField = listField "pagesAfter" pgNumCtx (seqOrNoResult pgs)
+                  lastInSet = min (lastPageNum - 1) (curPage + rad)
+                  elide = field "elideAfter" $ const $ do
+                    case lastInSet < lastPageNum - 1 && not (null pgs) of
+                        True -> return "elide"
+                        False -> noResult "no ellipsis"
+                  pgs = [pgNumItem n | n <- [curPage + 1 .. lastInSet]]
+

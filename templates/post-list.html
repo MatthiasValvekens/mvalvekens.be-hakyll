@@ -1,17 +1,24 @@
-<div class="container">
-    <ul>
-    $for(posts)$
-    <li class="media">
-        <div class="media-content">
-            <div class="content">
-                <p>
-                <strong>$date$</strong> $if(author)$<span class="is-italic has-text-weight-light" style="margin-left: 1rem;">@$author$</span>$endif$
-                <br>
-                <a href="$url$">$title$</a>
-                </p>
+
+<section class="section">
+    <h1 class="title has-text-centered">List of blog entries</h1>
+    <div class="container">
+        <ul>
+        $for(posts)$
+        <li class="media">
+            <div class="media-content">
+                <div class="content">
+                    <p>
+                    <strong>$date$</strong> $if(author)$<span class="is-italic has-text-weight-light" style="margin-left: 1rem;">@$author$</span>$endif$
+                    <br>
+                    <a href="$url$">$title$</a>
+                    </p>
+                </div>
             </div>
-        </div>
-    </li>
-    $endfor$
-    </ul>
-</div>
+        </li>
+        $endfor$
+        </ul>
+    </div>
+</section>
+$if(currentPageNum)$
+$partial("templates/pagination.html")$
+$endif$
