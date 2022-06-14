@@ -5,7 +5,7 @@
 import Hakyll
 
 import Text.Pandoc.Definition
-import Text.Pandoc.Walk (walkPandocM)
+import Text.Pandoc.Walk (walkPandocM, walk)
 import Text.Pandoc 
     ( Extension (..)
     , ReaderOptions (..)
@@ -127,15 +127,16 @@ hakyllRules = do
                 >>= loadAndApplyTemplate "templates/default.html" ctx
 
     blogPagination <- do
-        let grp = liftM (paginateEvery 5) . sortRecentFirst
+        let grp = liftM (paginateEvery 4) . sortRecentFirst
         buildPaginateWith grp ("blog/**/*.md" .&&. hasNoVersion) blogPageId
 
     paginateRules blogPagination $ \page pattern -> do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll pattern
+            let postInListCtx = postCtxNoTags <> field "preview" getPreview
             let ctx = constField "title" "Blog"
-                    <> listField "posts" postCtxNoTags (return posts)
+                    <> listField "posts" postInListCtx (return posts)
                     <> radialPaginationContext 2 blogPagination page
                     <> copyrightContext
                     <> defaultContext
@@ -149,6 +150,8 @@ hakyllRules = do
         compile $ pandocBlogPostCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx 
             >>= loadAndApplyTemplate "templates/default.html" ctx
+
+    match "blog/**/*.md" $ version "preview" $ compile pandocPreviewCompiler
 
     match "blog/**/*.md" $ version "jsonld-meta" $ do
         -- override the url field to point to the base version
@@ -228,6 +231,7 @@ hakyllRules = do
           blogPageId :: PageNumber -> Identifier
           blogPageId 1 = "blog.html"
           blogPageId n = fromFilePath $ "blog/pagelist/" ++ show n ++ ".html"
+          getPreview = loadBody . setVersion (Just "preview") . itemIdentifier
 
 
 --------------------------------------------------------------------------------
@@ -588,4 +592,21 @@ radialPaginationContext rad p curPage = paginateContext p curPage
                         True -> return "elide"
                         False -> noResult "no ellipsis"
                   pgs = [pgNumItem n | n <- [curPage + 1 .. lastInSet]]
+
+
+pandocPreviewCompiler :: Compiler (Item String)
+pandocPreviewCompiler = getResourceBody >>= readPandoc >>= render
+    where render = withItemBody reduceToFirstPara >=> return . writePandoc
+          reduceToFirstPara (Pandoc _ blks) = reduceToFirstPara' blks
+          reduceToFirstPara' [] = noResult "no preview"
+          reduceToFirstPara' (x:xs) = case x of
+            Para inl -> return (Pandoc (Meta mempty) [Plain $ filterInl inl])
+            _ -> reduceToFirstPara' xs
+          filterInl = fmap (walk transfInl)
+          transfInl :: Inline -> Inline
+          -- drop footnotes
+          transfInl (Note _) = Span ("", [], []) []
+          -- unlink links
+          transfInl (Link _ inls _) = Span ("", [], []) inls
+          transfInl x = x
 
