@@ -27,7 +27,7 @@ import Data.Text.Encoding (encodeUtf8, decodeUtf8)
 
 import Data.ByteString.Lazy (toStrict)
 
-import Control.Monad (liftM, (>=>), msum)
+import Control.Monad (liftM, liftM2, (>=>), msum)
 import System.FilePath (takeBaseName)
 
 import qualified GHC.IO.Encoding as E
@@ -97,8 +97,10 @@ hakyllRules = do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll ("blog/**/*.md" .&&. hasNoVersion)
-            specialPages <- loadAll (fromList ["about.html", "contact.html", "blog.html"])
-            let pages = specialPages ++ posts
+            specialPages <- loadAll (fromList ["about.html", "contact.html"])
+            let postListIds = "blog/pagelist/*.html"
+            blogPostLists <- liftM2 (:) (load "blog.html") (loadAll postListIds)
+            let pages = specialPages ++ blogPostLists ++ posts
             let rootCtx = constField "rootUrl" rootUrl
             let pgCtx = listField "pages" (rootCtx <> defaultContext) (return pages)
             makeItem ("" :: String)
