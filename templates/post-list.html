@@ -10,13 +10,17 @@
                     <p>
                     <strong>$date$</strong> $if(author)$<span class="is-italic has-text-weight-light" style="margin-left: 1rem;">@$author$</span>$endif$
                     <br>
+                    $if(preview)$
+                    <span style="color: #333">$title$</span>
+                    $else$
                     <a href="$url$" style="color: #333">$title$</a>
+                    $endif$
                     </p>
                     $if(preview)$
                     <div class="preview" style="color: #555">
                         <p>
                             $preview$
-                            <span style="color: #aaa; user-select: none;" aria-hidden="true">/.../</span>
+                            <span style="color: #0055a3; user-select: none;" aria-hidden="true">/.../</span>
                         </p>
                     </div>
                     <a href="$url$" aria-label="Read $title$">Read &raquo;</a>
