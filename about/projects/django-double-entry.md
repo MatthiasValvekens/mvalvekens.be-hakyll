@@ -23,5 +23,5 @@ project-url: https://github.com/MatthiasValvekens/django-double-entry/
 # django-double-entry {.is-family-monospace}
 
 Django reusable app to provide support for basic double-entry bookkeeping in the Django ORM.
-It also implements a highly customisable transaction processing API (implemented via <a href="https://github.com/MatthiasValvekens/django-webauth"><span class="is-family-monospace">django-webauth</span></a>).
+It also implements a highly customisable transaction processing API.
 The code is well-tested and has been running in production systems for about two years now.
