@@ -31,6 +31,13 @@
                 margin-left: auto;
                 margin-right: auto;
             }
+
+
+            .socials .icon {
+                font-size: 120%;
+                margin-left: 0.5em;
+                margin-right: 0.5em;
+            }
         </style>
         <script src="/static/js/website-nav.js"></script>
         <script>document.addEventListener('DOMContentLoaded', handleFragment);</script>
@@ -79,13 +86,13 @@
                             <h2 class="is-sr-only">Home</h2>
                             <div class="title is-1 has-text-centered has-text-black-ter is-family-secondary" id="name">
                                 Matthias Valvekens </div>
-                            <div class="subtitle is-6 has-text-centered has-text-weight-light">
+                            <div class="subtitle is-size-6 has-text-centered has-text-weight-light">
                                 Mathematician<br>Software developer
                             </div>
                             <figure class="image is-128x128" style="margin-left: auto; margin-right: auto;">
                                 <img class="is-rounded has-background-white" style="border-width: thin; border-color: #ccc; border-style: solid;" src="/static/images/tegaki-matthias-128.png" alt="hand-drawn profile picture">
                             </figure>
-                            <div class="box has-text-centered" style="margin-bottom: 0.5rem;">
+                            <div class="box has-text-centered socials" style="margin-bottom: 0.5rem;">
                                 <span class="icon">
                                     <a href="https://www.linkedin.com/in/matthias-valvekens-146932a2" aria-label="LinkedIn profile"><span class="fab fa-linkedin-in"></span></a>
                                 </span>
@@ -96,12 +103,11 @@
                                     <a href="https://twitter.com/MatthiasVal" aria-label="Twitter profile"><span class="fab fa-twitter"></span></a>
                                 </span>
                             </div>
-                            <div class="box is-size-7">
-                                <h3 class="is-6 has-text-centered has-text-weight-light" style="margin-top: 1rem;">
+                            <div class="box is-6">
+                                <h3 class="is-size-5 has-text-centered has-text-weight-light" style="margin-top: 1rem;">
                                     Photo credit
                                 </h3>
                                 <p class="has-text-centered">
-                                    
                                     &#xA9; Archives of the Mathematisches Forschungsinstitut Oberwolfach
                                 </p>
                             </div>
@@ -136,7 +142,7 @@
                             </p>
                         </section>
                         <section class="content-tab box transparent is-hidden" id="tab-contact-me">
-                            <div class="box is-size-7" style="margin-bottom: 2rem;">
+                            <div class="box" style="margin-bottom: 2rem;">
                                 $snippet("snippets/contact-info.html")$
                             </div>
                         </section>
