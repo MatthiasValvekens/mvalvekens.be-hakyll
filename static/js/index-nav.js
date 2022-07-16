@@ -1,14 +1,3 @@
-// hamburger expando for navbar on a generic page
-function activateNavbarBurger() {
-    const nav = document.querySelector('#main-navbar');
-    const burger = nav.querySelector('.navbar-burger');
-    const menu = nav.querySelector('.navbar-menu')
-    burger.addEventListener('click', () => {
-        burger.classList.toggle('is-active');
-        menu.classList.toggle('is-active');
-    });
-}
-
 // tab structure on index page
 
 function toggleTabNav(obj) {
@@ -48,3 +37,12 @@ function handleFragment() {
     let activeTab = tabs.querySelector('a[data-tab-nav=' + activeTabName + ']');
     toggleTabNav(activeTab);
 }
+
+function makeTabsClickable() {
+    document.querySelectorAll("a[data-tab-nav]").forEach(
+        h => h.addEventListener('click', e => toggleTabNav(h))
+    );
+}
+
+document.addEventListener('DOMContentLoaded', handleFragment);
+document.addEventListener('DOMContentLoaded', makeTabsClickable);
