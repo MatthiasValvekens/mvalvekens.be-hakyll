@@ -84,7 +84,7 @@ hakyllRules = do
             let aboutCtx 
                     = listField "about-sections" aboutSecCtx (return sections)
                     <> constField "title" "About Me"
-                    <> field "extrastyle" (const $ loadBody "about/style.css")
+                    <> constField "extrastyle" "about.css"
                     <> copyrightContext
                     <> defaultContext
 
