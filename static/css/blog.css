@@ -23,6 +23,15 @@
     margin-top: 2rem;
 }
 
+.blog-paras h4 {
+    margin-top: 1rem;
+}
+
+.blog-paras h5 {
+    margin-top: 1rem;
+    font-style: italic;
+}
+
 section.article-info {
     margin-bottom: 2rem;
     text-align: center;
@@ -40,7 +49,7 @@ section.article-info {
 
 .blog-paras .note {
     border-radius: 1em;
-    background-color: #eaeff2;
+    background-color: #e4f0fe;
     padding: 1em;
     margin-bottom: 1em;
 }
@@ -53,7 +62,7 @@ section.article-info {
 
 .blog-paras .info {
     border-radius: 1em;
-    background-color: #eaeff2;
+    background-color: #e4f0fe;
     padding: 1em;
     margin-bottom: 1em;
 }
