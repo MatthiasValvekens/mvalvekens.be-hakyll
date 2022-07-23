@@ -23,3 +23,29 @@
 .link-list li:not(:last-child) {
     margin-bottom: 1ex;
 }
+
+#scroll-to-top {
+    display: none;
+    color: rgba(0, 0, 0, 0.5);
+    border: none;
+    background: none;
+    font-size: 110%;
+    cursor: pointer;
+    position: fixed;
+    right: 1vw;
+    top: 5vh;
+    z-index: 1000;
+}
+
+#scroll-to-top .arrow {
+    font-size: 120%;
+}
+
+@media screen and (max-width: 1024px) {
+    #scroll-to-top {
+        right: 0.5vw;
+    }
+    #scroll-to-top .scroll-text {
+        display: none;
+    }
+}
