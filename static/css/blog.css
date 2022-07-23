@@ -104,6 +104,19 @@ section.article-info {
     padding-left: 1em;
 }
 
+.blog-paras a.section-link {
+    color: #363636;
+}
+
+.blog-paras .section-link:hover::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0c1";
+    margin-left: -1.5em;
+    margin-right: 0.5em;
+    color: #aaa;
+}
+
 
 /* Bibliography */
 

@@ -432,12 +432,14 @@ readPandocBiblioFromMeta ropt csl item = do
 
 
 shiftAndStyleHeadings :: Int -> Block -> Block
-shiftAndStyleHeadings by (Header lvl attr content) = Header lvl' attr' content
+shiftAndStyleHeadings by (Header lvl attr content) = Header lvl' attr' content'
     where (elId, classes, kvals) = attr
           lvl' = lvl + by
           -- we up the level one more in Bulma styling
           classes' = ("subtitle":"is-" <> (T.pack $ show $ lvl' + 1):classes)
           attr' = (elId, classes', kvals)
+          linkAttr = ("", ["section-link"], [])
+          content' = [Link linkAttr content ("#" <> elId, "")]
 shiftAndStyleHeadings _ x = x
 
 
