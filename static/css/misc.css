@@ -20,6 +20,10 @@
     padding-bottom: 3rem;
 }
 
+#github-footer-link {
+    margin-top: 1ex;
+}
+
 .link-list li:not(:last-child) {
     margin-bottom: 1ex;
 }
