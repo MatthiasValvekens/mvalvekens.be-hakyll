@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="145mm"
+   height="127.6974mm"
+   viewBox="0 0 144.99999 127.69741"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title5368">ISO 32004 MAC structure</title>
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="marker4931"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="5.32440803"
+       markerHeight="6.15538501"
+       viewBox="0 0 5.3244081 6.15538509"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path4929" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="5.3244081"
+       markerHeight="6.155385"
+       viewBox="0 0 5.3244081 6.1553851"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <rect
+       x="163.83412"
+       y="74.237335"
+       width="68.477539"
+       height="75.517288"
+       id="rect231" />
+    <rect
+       x="102.39632"
+       y="37.118668"
+       width="386.54611"
+       height="399.34567"
+       id="rect113" />
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-17.610033,-16.735332)">
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,4.4488555,3.9179813)"
+       id="text111"
+       style="white-space:pre;shape-inside:url(#rect113);display:inline;fill:#000000" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,4.4488555,3.9179813)"
+       id="text229"
+       style="white-space:pre;shape-inside:url(#rect231);display:inline;fill:#ff0000" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.175px;line-height:1.6;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+       x="22.058889"
+       y="22.882635"
+       id="text237"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="22.882635"
+         id="tspan461">%PDF-2.0</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="27.995255"
+         id="tspan515">% Objects go here...</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="33.107876"
+         id="tspan627" /><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="38.220497"
+         id="tspan629">xref</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="43.333115"
+         id="tspan631">0 8</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="48.445736"
+         id="tspan633">0000000000 65535 f </tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="53.558357"
+         id="tspan635">0000000017 00000 n </tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="58.670975"
+         id="tspan647">... </tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="63.783596"
+         id="tspan649">trailer</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="68.896217"
+         id="tspan651">&lt;&lt;</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="74.008835"
+         id="tspan659">  /Root 1 0 R /Encrypt 4 0 R /Size 8</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="79.121452"
+         id="tspan671">  /AuthCode &lt;&lt;</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="84.234077"
+         id="tspan3371" /><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="89.346695"
+         id="tspan1907">   /MAC <tspan
+   style="fill:#000000"
+   id="tspan3383">&lt;30820154...</tspan><tspan
+   id="tspan9557"
+   style="fill:#000000;fill-opacity:1">&gt;</tspan></tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="94.459312"
+         id="tspan3373" /><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="99.571938"
+         id="tspan1913">   /ByteRange [0 2004 2694 109]</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="104.68456"
+         id="tspan1909" /><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="109.79718"
+         id="tspan3375">   /Location /Standalone</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="114.9098"
+         id="tspan1917">  &gt;&gt;</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="120.02242"
+         id="tspan5865">  %...</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="125.13504"
+         id="tspan673">&gt;&gt;</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="130.24765"
+         id="tspan675">startxref</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="135.36028"
+         id="tspan677">1689</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#800080;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="140.4729"
+         id="tspan679">%%EOF</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#2a2729;fill-opacity:1;stroke-width:0.264583"
+         x="22.058889"
+         y="145.58551"
+         id="tspan681" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+       x="118.83268"
+       y="123.12437"
+       id="text3387"><tspan
+         id="tspan3385"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="118.83268"
+         y="123.12437"><tspan
+   style="font-weight:bold"
+   id="tspan3391">ByteRange</tspan> indicates the</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#5c5c00;fill-opacity:1;stroke-width:0.264583"
+         x="118.83268"
+         y="127.09312"
+         id="tspan4467">regions covered <tspan
+   style="fill:#800080"
+   id="tspan10856">by the MAC</tspan></tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+         x="118.83268"
+         y="131.06186"
+         id="tspan4469">(Excludes the value of</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+         x="118.83268"
+         y="135.03061"
+         id="tspan4471">the MAC entry itself)</tspan></text>
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.265;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleStart)"
+       d="M 120.60737,117.53656 C 129.92037,95.693348 83.694009,98.741241 83.694009,98.741241"
+       id="path3931" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.321299;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4359"
+       width="54.805729"
+       height="20.432297"
+       x="91.511215"
+       y="117.56473"
+       rx="5"
+       ry="5" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4414"
+       width="50.290195"
+       height="12.868871"
+       x="107.73848"
+       y="80.284576"
+       rx="5"
+       ry="5" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       x="133.02698"
+       y="85.620628"
+       id="text4418"><tspan
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.265"
+         x="133.02698"
+         y="85.620628"
+         id="tspan4465">Binary string with </tspan><tspan
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.265"
+         x="133.02698"
+         y="89.589378"
+         id="tspan4977">MAC token</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#800000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4527"
+       width="25.907068"
+       height="7.7890534"
+       x="36.661293"
+       y="84.517754"
+       rx="5"
+       ry="5" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4931)"
+       d="M 107.39983,86.549678 C 77.259573,76.390043 63.544066,87.734969 63.544066,87.734969"
+       id="path4927" />
+    <rect
+       style="opacity:0.254753;fill:#800080;fill-opacity:1;stroke:#000000;stroke-width:0.272705;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10625"
+       width="15.988461"
+       height="4.2254748"
+       x="63.448673"
+       y="96.503502" />
+    <rect
+       style="opacity:0.254753;fill:#5c5c00;fill-opacity:1;stroke:#000000;stroke-width:0.239324;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10625-6"
+       width="12.217237"
+       height="4.2588563"
+       x="50.378433"
+       y="96.483681" />
+  </g>
+  <metadata
+     id="metadata5354">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Matthias Valvekens</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:title>ISO 32004 MAC structure</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

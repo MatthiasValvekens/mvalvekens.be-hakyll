@@ -41,33 +41,26 @@ section.article-info {
     background-color: #cccccc;
 }
 
-.blog-paras .note:before {
+.blog-paras .note::before {
     content: "Note";
     font-weight: bold;
     font-variant: small-caps;
 }
 
-.blog-paras .note {
+.blog-paras .note, .blog-paras .info {
     border-radius: 1em;
     background-color: #e4f0fe;
     padding: 1em;
     margin-bottom: 1em;
 }
 
-.blog-paras .info:before {
+.blog-paras .info::before {
     content: "Info";
     font-weight: bold;
     font-variant: small-caps;
 }
 
-.blog-paras .info {
-    border-radius: 1em;
-    background-color: #e4f0fe;
-    padding: 1em;
-    margin-bottom: 1em;
-}
-
-.blog-paras .warning:before {
+.blog-paras .warning::before {
     content: "Warning";
     font-weight: bold;
     font-variant: small-caps;
@@ -86,7 +79,7 @@ section.article-info {
     margin-right: auto;
 }
 
-.blog-paras .tldr:before {
+.blog-paras .tldr::before {
     content: "TL;DR";
     font-weight: bold;
     font-variant: small-caps;
@@ -115,6 +108,24 @@ section.article-info {
     margin-left: -1.5em;
     margin-right: 0.5em;
     color: #aaa;
+}
+
+.blog-paras figure {
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.blog-paras figcaption {
+    margin-top: 1em;
+}
+
+.blog-paras figcaption::before {
+    content: "Caption";
+    font-weight: bold;
+    font-variant: small-caps;
+    color: #888;
+    margin-right: 1em;
 }
 
 
