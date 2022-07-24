@@ -156,7 +156,7 @@ That way we only need a single **ByteRange** to make both the signature and the 
 While signatures in encrypted documents aren't a very common sight, the fix was simple enough that sacrificing compatibility wasn't worth it. After some discussion, we decided to put it in the spec.
 
 ::: note
-For an example where the separation of concerns is even more clear: a document timestamp signature ordinarily has no authenticating value. timestamping servers don't care about what they sign, and it's possible to add a timestamp to an encrypted document without knowing the key. In other words, there's no accountability _at all_.
+For an example where the separation of concerns is even more clear: a document timestamp signature ordinarily has no authenticating value. Timestamping servers don't care about what they sign, and it's possible to add a timestamp to an encrypted document without knowing the key. In other words, there's no accountability _at all_.
 
 Adding a [@pdfmac] MAC token as an (unsigned) attribute on the signature is a way to solve that problem.
 :::
@@ -178,7 +178,7 @@ To address this concern, [@pdfmac] defines an extra permission bit to indicate w
 
 [^digsig-mac-combo]: In a signed revision of a PDF document, the MAC token is actually computed over the digest of the byte range together with a digest of the signature. As such, it protects both the signature and the document content.
 
-[^mac-incr-update]: The analogous problem for incremental updates by non-MAC-aware processors is left as an exercise to the reader.
+[^mac-incr-update]: The analogous problem for incremental updates by non-MAC-aware processors is left as an exercise to the reader. Alternatively, if you're not in the mood, feel free to [peek ahead](#coverage){title="Link to section on coverage checks"}.
 
 [^perms]: The "pseudo-MAC" being a separate entry computed by encrypting the permission bits using AES-ECB (!). Perhaps ironically, this piece of known AES plaintext was a large part of why we needed [@pdfmac] in the first place...
 
@@ -201,7 +201,7 @@ In fact, if I'd write some piece of software that required MACs for everything, 
 
 
 
-## Coverage checks
+## Coverage checks {#coverage}
 
 A MAC should cover the entire document to which it is applied (other than the MAC container itself). As with digital signatures, coverage is indicated by the associated **ByteRange**. When receiving a document with a MAC, it's very important to check the **ByteRange**: if the covered region is too small, unauthorised changes could still lurk in the "unprotected" regions. Processors incrementally updating a document are also expected to update the MAC (including the coverage range).
 
