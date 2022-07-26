@@ -153,10 +153,12 @@ This **ByteRange**-based approach works well enough, but there's a snag: any giv
 Since MACs and digital signatures [serve very different purposes][macs-digsig], that incompatibility didn't sit well with me. Especially since there's an easy, backwards-compatible solution! PDF signatures use CMS `SignedData`, which supports attributes, so we could simply let the MAC token "hitch a ride" on the signature.
 That way we only need a single **ByteRange** to make both the signature and the MAC work[^digsig-mac-combo]. The structure of the MAC token is otherwise pretty much the same as in the unsigned case.
 
-While signatures in encrypted documents aren't a very common sight, the fix was simple enough that sacrificing compatibility wasn't worth it. After some discussion, we decided to put it in the spec.
+While signatures in encrypted documents aren't a very common sight, we occasionally come across signed encrypted documents. By allowing MACs in any encrypted document, we can achieve (more or less) the same integrity guarantees for _all_ such documents.
+This uniformity also benefits validation: a MAC checker with zero signature validation capabilities shouldn't have to make judgment calls about whether documents with a signature (and no MAC) are adequately protected.
+In addition, the fix was simple enough that sacrificing compatibility wasn't worth it. After some discussion, we decided to put it in the spec.
 
 ::: note
-For an example where the separation of concerns is even more clear: a document timestamp signature ordinarily has no authenticating value. Timestamping servers don't care about what they sign, and it's possible to add a timestamp to an encrypted document without knowing the key. In other words, there's no accountability _at all_.
+For an example where the separation of concerns between MACs and signatures is even more clear: a document timestamp signature ordinarily has no authenticating value. Timestamping servers don't care about what they sign, and it's possible to add a timestamp to an encrypted document without knowing the key. In other words, there's no accountability _at all_.
 
 Adding a [@pdfmac] MAC token as an (unsigned) attribute on the signature is a way to solve that problem.
 :::
@@ -243,7 +245,7 @@ Things to keep in mind:
  - Backwards compatibility comes with some security trade-offs. Keep those trade-offs in mind.
  - Validation for MACs is a lot more straightforward than for signatures.
 
-Oh, and if you're keen to implement [@pdfmac] yourself once it's out, please give Annex B a proper read.
+Oh, and if you're keen to implement [@pdfmac] yourself once it's out, please give Annex B a proper read for some extra info on what to look out for when validating MACs in PDF documents.
 :::
 
 
