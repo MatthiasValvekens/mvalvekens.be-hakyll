@@ -59,8 +59,8 @@ The former category is more properly classified as exploiting the behaviour of s
 
 First up, we have cryptographic malleability issues.
 
- - As of [@pdf2], PDF supports RC4 (legacy) and AES-CBC for content encryption out of the box. Both of these schemes are unauthenticated, i.e. don't allow the decrypter to determine cryptographically whether a ciphertext has been tampered with. This is already problematic, but in the case of PDF, relatively difficult to exploit directly.
- - In addition, the way [@pdf2] _uses_ AES-CBC actually allows for _systematic_ injection of attacker-controlled content. If you're interested, give the [RUB team's explanation of CBC malleability](https://pdf-insecurity.org/encryption/cbc-malleability.html) a read.
+ - As of [@pdf2], PDF supports RC4 (legacy) and AES-CBC for content encryption out of the box. Both of these schemes are unauthenticated, i.e. don't allow the decrypter to determine cryptographically whether a ciphertext has been tampered with. This is already problematic, but in the case of PDF, relatively difficult to exploit directly; it requires a little extra help.
+ - Unfortunately, that extra help is provided by a little piece of ciphertext with a plaintext required by [@pdf2]'s most recent security handler. That actually allows for _systematic_ injection of attacker-controlled content. If you're interested, give the [RUB team's explanation of CBC malleability](https://pdf-insecurity.org/encryption/cbc-malleability.html) a read.
 
 Moreover, there are also fundamental ways in which the _design_ of the PDF standard's encryption features leaves documents wide open to manipulation, irrespective of any cryptographic issues.
 
