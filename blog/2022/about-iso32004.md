@@ -190,9 +190,9 @@ To address this concern, [@pdfmac] defines an extra permission bit to indicate w
 ## User passwords
 
 PDF's standard security handler distinguishes between "user passwords" and "owner passwords".
-It's somewhat common for people to apply encryption to a PDF document, but leave the user password empty, while still setting the owner password to something else. This is the digital equivalent of a "No Trespassing" sign on an unguarded fence. Sure, bona fide viewing will enforce permission bits if the owner password is not supplied, but nonetheless, _anyone can compute the file encryption key_ if the user password is left empty.
+It's somewhat common for people to apply encryption to a PDF document, but leave the user password empty, while still setting the owner password to something else. This is the digital equivalent of a "No Trespassing" sign on an unguarded fence. Sure, bona fide viewers will enforce permission bits if the owner password is not supplied, but nonetheless, _anyone can compute the file encryption key_ if the user password is left empty.
 
-In other words, from a purely technical perspective, anyone decrypt and modify the document content. This is no different in a scenario where MACs are used: if the user password is empty, anyone can validate, **but also regenerate the MAC**. In other words, **a MAC offers precisely zero protection in this situation**.
+In other words, from a purely technical perspective, anyone can decrypt and modify the document content. This is no different in a scenario where MACs are used: if the user password is empty, anyone can validate, **but also regenerate the MAC**. In other words, **a MAC offers precisely zero protection in this situation**.
 
 ::: warning
 Remember: a MAC that anyone can verify is a MAC that anyone can forge.
