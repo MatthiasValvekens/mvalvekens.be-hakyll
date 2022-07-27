@@ -118,13 +118,35 @@ Digital signatures and PKI address something much more complicated and vague, ra
 As such, it's not surprising that they require more baggage to process correctly.
 
 
+-----
+
+**Update** (2022-07-27)
+
+Someone raised the following counterpoint to the above: what if one were to replace the MAC with a signature using a key pair for which the private key is known among all participants? The signature could simply use self-signed certificates (perhaps with some custom extensions). Wouldn't that amount to pretty much the same thing? If so, we don't have to adopt any new technologies.
+
+I don't feel qualified to comment on whether one could provably recover the same (or roughly similar) security guarantees of a comparable MAC function with such a construction. It sounds plausible enough, so for the sake of the argument, let's assume that this "disguised MAC" idea is cryptographically sound.
+
+Even so, I don't think the idea simplifies things in PDF applications. Here are a few reasons why:
+
+
+ - You'd still need to find a way to derive the shared private key from the file encryption key (or save that shared key in an encrypted container of some kind).
+ - "Regular" signature processors would get confused by these new signatures.
+ - Signature algorithms are several orders of magnitude slower than MAC functions of a comparable bit strength (although probably not enough for it to matter in the big picture.
+ - Either way, you wouldn't be able to repurpose anything but the most bare-bones parts of the validation logic. MAC validation ordinarily happens very early in the file opening process, so you'd have to rewire your application to deal with these special signatures before doing anything else. In the end, you'd just have to maintain two mostly separate digital signature validation modules.
+
+Bottom line: MAC functions like HMAC are widely implemented and known to do very well in exactly this kind of use case, and insisting on using signatures would make things more confusing than they need to be.
+
+
+-----
+
+
 ::: tldr
 Oversimplifying slightly, I like to characterise the difference between MACs and signatures (in the PDF context) as follows.
 
  - Digital signatures are for **authenticating actors**, where it matters _precisely who_ did something.
  - MACs are an enforcement mechanism to restrict edits to **authorised actors**, i.e. those who know the key.
 
-So, can MACs replace digital signatures? Absolutely not. But neither can digital signatures fully replace MACs. They're very different things with very different security properties.
+So, can MACs replace digital signatures? Absolutely not. But given the way signing is used in PDF, neither can digital signatures fully replace MACs. Both have their place.
 :::
 
 
