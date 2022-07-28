@@ -18,7 +18,8 @@ references:
       citation-label: "ISO 32000-2:2020"
     - id: pdfmac
       type: iso-iec-standard
-      publisher: "ISO/DTS"
+      publisher: "ISO"
+      standard-type: "DTS"
       number: 32004
       title: "Document management — Portable document format — Integrity protection in encrypted documents in PDF 2.0"
       citation-label: "ISO/DTS 32004"
