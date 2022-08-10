@@ -69,7 +69,7 @@ Moreover, there are also fundamental ways in which the _design_ of the PDF stand
  - Did I mention that you can also straight up _delete_ encrypted objects with impunity?
  - Even better: [@pdf2] allows "local" encryption overrides through the *Identity* crypt filter. This feature was intended to allow things like file metadata to remain unencrypted if desired, but actually allows entire streams, pages, images, etc. to be replaced with attacker-controlled ones as long as they declare themselves as unencrypted. Oops.
 
-So, the upshot is this: given a legitimate encrypted PDF document, a sufficiently clever attacker can make the document say whatever they want without knowing the key. If an unsuspecting user then opens the document in their favourite viewer, they'll get a password prompt (as they probably expected), When the correct password is entered, the viewer will dutifully display the attacker-controlled content, and our poor user is none the wiser.
+So, the upshot is this: given a legitimate encrypted PDF document, a sufficiently clever attacker can make the document say whatever they want without knowing the key. If an unsuspecting user then opens the document in their favourite viewer, they'll get a password prompt&mdash;as they probably expected. When the correct password is entered, the viewer will dutifully display the attacker-controlled content, and our poor user is none the wiser.
 
 This is a problem, because in the mind of a business user&mdash;and the same probably goes for most tech people!&mdash;something being "password-protected" is pretty much synonymous with "kept under lock and key". People expect password-protected data to be _totally inaccessible and untouchable_ without knowledge of the password.
 This expectation is being subverted by PDF's approach to encrypting documents.
@@ -207,7 +207,7 @@ In fact, if I'd write some piece of software that required MACs for everything, 
 
 A MAC should cover the entire document to which it is applied (other than the MAC container itself). As with digital signatures, coverage is indicated by the associated **ByteRange**. When receiving a document with a MAC, it's very important to check the **ByteRange**: if the covered region is too small, unauthorised changes could still lurk in the "unprotected" regions. Processors incrementally updating a document are also expected to update the MAC (including the coverage range).
 
-This presents a problem: what to do when one receives a document with a "stale" MAC (i.e. a MAC that doesn't cover the full document anymore). That could be the result of a malicious edit, but also due to a authorised change by a tool that doesn't implement [@pdfmac].
+This presents a problem: what to do when one receives a document with a "stale" MAC (i.e. a MAC that doesn't cover the full document anymore). That could be the result of a malicious edit, but also due to an authorised change by a tool that doesn't implement [@pdfmac].
 
 Again, this one boils down to choosing compatibility vs. security, and there's no easy answer. Personally, I would write my implementation to reject such documents by default.
 
