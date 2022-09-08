@@ -15,7 +15,7 @@ Originally, this event was scheduled to take place in Berlin, but it got moved o
 For further information, visit [the talk's info page](https://www.pdfa.org/presentation/cryptography-in-pdf-future-perspectives/).
 
 
-# Video: Document security and digital signatures in PDF
+# Video: Cryptography in PDF: future perspectives
 
 ```{#video .youtube ytid=_TTdr8-B1RA}
 {
