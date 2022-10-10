@@ -497,7 +497,7 @@
         <else-if type="iso-iec-standard">
           <group display="right-inline">
             <text macro="iso-iec-identifier" suffix=", "/>
-            <text macro="title"/>
+            <text variable="title" font-style="italic"/>
           </group>
         </else-if>
         <else>

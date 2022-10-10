@@ -418,6 +418,8 @@ readPandocBiblioFromMeta ropt csl item = do
             }
         biblioMeta = Pandoc.Meta .
             Map.insert "csl" (Pandoc.MetaString "_hakyll/style.csl") $
+            Map.insert "link-citations" (Pandoc.MetaBool True) $
+            Map.insert "link-bibliography" (Pandoc.MetaBool False) $
             meta
         errOrPandoc = Pandoc.runPure $ do
             Pandoc.modifyPureState addBiblioFiles
