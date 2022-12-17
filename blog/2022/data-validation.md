@@ -64,7 +64,6 @@ The most basic error handler in functional programming is arguably `Either`.
 Applied to our toy example, this is what the API looks like:
 
 ```haskell
-
 type FieldData = Map String String
 
 toUser :: FieldData -> Either ConversionErr User
@@ -431,7 +430,6 @@ instance Functor (Ior a) where
 In order to define a suitable `Applicative` instance, we again need the error type to be a `Semigroup`, like with `Validated`.
 
 ```haskell
-
 -- | Utility function to "attach" existing errors to a continued computation.
 combineErrors :: Semigroup e => e -> Ior e a -> Ior e a
 combineErrors err (JustRight x) = Both err x
