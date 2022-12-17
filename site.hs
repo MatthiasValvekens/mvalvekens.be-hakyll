@@ -40,8 +40,16 @@ import Data.Scientific (toBoundedInteger)
 unminifiedCss :: Pattern
 unminifiedCss = "static/css/*" .&&. complement "static/css/*.min.css"
 
+regularAssets :: Pattern
+regularAssets = "static/css/**"
+              .||. "static/images/**"
+              .||. "static/js/**"
+              .||. "static/misc/**"
+              .||. "static/webfonts/*.woff"
+              .||. "static/webfonts/*.woff2"
+
 simpleStaticAssets :: Pattern
-simpleStaticAssets = ("static/**" .&&. complement unminifiedCss) .||. "robots.txt"
+simpleStaticAssets = (regularAssets .&&. complement unminifiedCss) .||. "robots.txt"
 
 main :: IO ()
 main = do
