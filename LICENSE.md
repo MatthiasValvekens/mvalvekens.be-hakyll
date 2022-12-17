@@ -9,6 +9,7 @@ The material in this repository is diverse, and so is the applicable licensing.
  - Individual markdown content files have the license(s) indicated in the file metadata (typically CC BY-SA 4.0).
  - The bibliography CSL stylesheet is dual-licensed under CC BY-SA 3.0 and CC BY-SA 4.0
  - All other HTML files are _not_ licensed for any kind of reuse at this time, but they may be in the future.
+ - Fonts are licensed as specified in the license file in `static/webfonts/`
 
 This notice file will get updated as necessary. I haven't figured out how I'm going to deal with mixed code+text content, for example.
 
