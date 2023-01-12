@@ -140,21 +140,33 @@ order: 1
             "roleName": "Senior Scala Engineer"
         }
     ],
-    "memberOf": {
-        "@type": "OrganizationRole",
-        "memberOf": {
-            "@type": "Organization",
-            "name": "ISO/TC 171/SC 2",
-            "url": "https://www.iso.org/committee/53674.html",
-            "parentOrganization": {
+    "memberOf": [
+        {
+            "@type": "OrganizationRole",
+            "memberOf": {
                 "@type": "Organization",
-                "name": "ISO",
-                "url": "https://www.iso.org/"
-            }
+                "name": "ISO/TC 171/SC 2",
+                "url": "https://www.iso.org/committee/53674.html",
+                "parentOrganization": {
+                    "@type": "Organization",
+                    "name": "ISO",
+                    "url": "https://www.iso.org/"
+                }
+            },
+            "startDate": "2021",
+            "roleName": "Subject Matter Expert"
         },
-        "startDate": "2021",
-        "roleName": "Subject Matter Expert"
-    }
+        {
+            "@type": "OrganizationRole",
+            "memberOf": {
+                "@type": "Organization",
+                "name": "PDF Association",
+                "url": "https://pdfa.org"
+            },
+            "startDate": "2022",
+            "roleName": "Individual Member"
+        }
+    ]
 }
 
 </script>
@@ -166,12 +178,12 @@ order: 1
         <span class="fas fa-file-pdf" style="margin-right: 0.5rem;" aria-hidden="true"></span> My CV &nbsp;&nbsp;<i>(PDF/A+UA)</i>
     </a>
 </div>
-<p style="margin-bottom: 1rem;">
-$snippet("snippets/employment-history-summary.html")$
-</p>
-<p style="margin-bottom: 2rem;">
-$snippet("snippets/interests.html")$
-</p>
+<div class="content" style="margin-bottom: 1rem;">
+    $snippet("snippets/employment-history-summary.html")$
+</div>
+<div class="content" style="margin-bottom: 2rem;">
+    $snippet("snippets/interests.html")$
+</div>
 <p>
 Want to get in touch? Then drop me a message at <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;matthias&#x40;&#x6D;&#x76;&#x61;&#x6C;&#x76;&#x65;&#x6B;&#x65;&#x6E;&#x73;&#x2E;&#x62;&#x65;">matthias&#x40;&#x6D;&#x76;&#x61;&#x6C;&#x76;&#x65;&#x6B;&#x65;&#x6E;&#x73;&#x2E;&#x62;&#x65;</a>.
 </p>
