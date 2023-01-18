@@ -121,7 +121,7 @@ PDF/X documents also need certain XMP metadata properties to be set. For PDF/X-4
  [^relaxed-xmpmm-x6]: PDF/X-6 is a little less opinionated on this topic, but it doesn't hurt to always supply these values.
 
 
-## Sample code
+# Sample code
 
 Here's a subclass of iText's `PdfDocument` that you can use as a starting point to generate PDF/X output (used with iText 7.2.4).
 
