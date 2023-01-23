@@ -44,7 +44,7 @@ data User = User
 
 In other words, for every user we record a name and the date they joined, and possibly their date of birth, if applicable. Next, let's imagine that we have to extract this user data from a `Map String String`. Obviously, this is a contrived example, but it'll do for now.
 
-What about errors? To keep things simple, let's say that we are interested in two error condition: missing required fields, and parse errors in fields. Those can be represented in the following error type:
+What about errors? To keep things simple, let's say that we are interested in two error conditions: missing required fields, and parse errors in fields. Those can be represented in the following error type:
 
 
 ```haskell
@@ -372,7 +372,7 @@ What if you want to be able to distinguish between critical errors and recoverab
 Let's start by extending our example a little to spell out what we want.
 
 ```haskell
-le ExampleAbstractWarnings
+module ExampleAbstractWarnings
   ( module ExampleAbstract,
     ConvertWithWarnings (..),
     toUserTolerant,
