@@ -26,4 +26,4 @@ project-url: https://github.com/MatthiasValvekens/pyHanko
 # pyHanko {.is-family-monospace}
 
 Sign PDFs using Python. Includes support for PKCS11 devices in general, and the Belgian eID in particular. PyHanko also deals with all baseline PAdES profiles.
-This project is currently in alpha.
+This project is currently in alpha, but is already being used in production workflows by quite a few organisations, including some companies operating in the trust services sector.
