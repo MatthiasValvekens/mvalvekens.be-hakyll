@@ -1,6 +1,8 @@
+# TODO upgrade lock files
+ARG HASKELL_VERSION=8.10.7
 # Setup from
 # https://timwspence.github.io/blog/posts/2019-08-02-optimized-docker-builds-for-haskell-stack.html
-FROM haskell:9.2.5-slim as dependencies
+FROM haskell:$HASKELL_VERSION-slim as dependencies
 
 RUN mkdir /opt/build
 WORKDIR /opt/build
@@ -14,7 +16,7 @@ COPY stack.yaml hakyll-site.cabal stack.yaml.lock /opt/build/
 RUN stack build --system-ghc --dependencies-only
 
 
-FROM haskell:9.2.5-slim as build
+FROM haskell:$HASKELL_VERSION-slim as build
 
 RUN apt-get update && apt-get install -y zip && rm -rf /var/lib/apt/lists/*
 
