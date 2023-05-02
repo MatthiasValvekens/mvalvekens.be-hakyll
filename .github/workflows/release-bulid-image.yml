@@ -1,7 +1,5 @@
 name: Publish site builder image
 on:
-  push:
-    branches: ["ci/*"]
   workflow_dispatch: {}
 jobs:
   publish-builder:
