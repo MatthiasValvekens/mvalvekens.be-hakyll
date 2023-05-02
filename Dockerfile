@@ -10,7 +10,7 @@ RUN apt-get update && apt-get download libgmp10 \
         && mv libgmp*.deb libgmp.deb && rm -rf /var/lib/apt/lists/*
 
 # The idea is that we only invalidate the dependency layer if the lock file changes
-COPY stack.yaml package.yaml stack.yaml.lock /opt/build/
+COPY stack.yaml stack.yaml.lock /opt/build/
 RUN stack build --system-ghc --dependencies-only
 
 
