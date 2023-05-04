@@ -25,6 +25,7 @@ jobs:
     uses: MatthiasValvekens/gha-hakyll-build/.github/workflows/build-website.yml@v1
     permissions:
       contents: read
+      packages: read
       id-token: write
   deploy:
     runs-on: ubuntu-latest
