@@ -22,7 +22,6 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.Time as Time
 import qualified Data.Text as T
-import qualified Data.HashMap.Strict as HMS
 import Data.Text.Encoding (encodeUtf8, decodeUtf8)
 
 import Data.ByteString.Lazy (toStrict)
@@ -33,6 +32,8 @@ import System.FilePath (takeBaseName)
 import qualified GHC.IO.Encoding as E
 
 import qualified Data.Aeson as Aes
+import qualified Data.Aeson.Key as Aes
+import qualified Data.Aeson.KeyMap as Aes
 import Data.Scientific (toBoundedInteger)
 
 --------------------------------------------------------------------------------
@@ -474,7 +475,7 @@ formatInlineMetadata orig@(CodeBlock attr jsonMeta)
                         >>= loadAndApplyTemplate templateName ctx
         return $ RawBlock "html" $ T.pack $ itemBody metaItem
     where (elId, classes, _) = attr
-          insertDefault k defaultVal = HMS.alterF alter k
+          insertDefault k defaultVal = Aes.alterF alter k
             where alter Nothing = Just <$> defaultVal
                   alter (Just x) = return (Just x)
           templateName = "templates/jsonld/jsonld-meta.html"
@@ -500,9 +501,9 @@ embedYoutubeVideos orig@(CodeBlock attr jsonMeta)
         let embedUrl = "https://www.youtube-nocookie.com/embed/" <> ytid
         let thumbnailUrl = "https://img.youtube.com/vi/" <> ytid <> "/maxresdefault.jpg"
         let contentUrl = "https://youtube.googleapis.com/v/" <> ytid
-        let newObj = HMS.insert "embedUrl" (Aes.String embedUrl)
-                   $ HMS.insert "thumbnailUrl" (Aes.String thumbnailUrl)
-                   $ HMS.insert "contentUrl" (Aes.String contentUrl) rawObj
+        let newObj = Aes.insert "embedUrl" (Aes.String embedUrl)
+                   $ Aes.insert "thumbnailUrl" (Aes.String thumbnailUrl)
+                   $ Aes.insert "contentUrl" (Aes.String contentUrl) rawObj
         let ctx = constField "width" (show width) <> constField "height" (show height)
                 <> constField "embed-url" (T.unpack embedUrl)
                 <> constField "video-url" (T.unpack videoUrl)
@@ -514,17 +515,17 @@ embedYoutubeVideos orig@(CodeBlock attr jsonMeta)
         
     where (elId, classes, kvals) = attr
           templateName = "templates/youtube-embed.html" 
-          extractIntOrFail :: T.Text -> Aes.Object -> Compiler Int
+          extractIntOrFail :: Aes.Key -> Aes.Object -> Compiler Int
           extractIntOrFail key obj = do
-            case HMS.lookup key obj of
+            case Aes.lookup key obj of
                 Just (Aes.Number x) -> case toBoundedInteger x of
                     Nothing -> fail "Expected int in JSON, got something else"
                     Just y -> return y
-                _ -> fail $ "No numeric key " ++ T.unpack key ++ " in YouTube meta"
+                _ -> fail $ "No numeric key " ++ Aes.toString key ++ " in YouTube meta"
           extractStringOrFail key obj = do
-            case HMS.lookup key obj of
+            case Aes.lookup key obj of
                 Just (Aes.String x) -> return (T.unpack x)
-                _ -> fail $ "No string key " ++ T.unpack key ++ " in YouTube meta"
+                _ -> fail $ "No string key " ++ Aes.toString key ++ " in YouTube meta"
 
 embedYoutubeVideos orig = return orig
 
