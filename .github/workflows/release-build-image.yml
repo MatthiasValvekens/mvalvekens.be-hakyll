@@ -4,6 +4,6 @@ on:
 
 jobs:
   publish-builder:
-    uses: MatthiasValvekens/gha-hakyll-build/.github/workflows/release-build-image.yml@v1
+    uses: MatthiasValvekens/gha-hakyll-build/.github/workflows/release-build-image.yml@master
     with:
       ghc-version: 9.2.7
