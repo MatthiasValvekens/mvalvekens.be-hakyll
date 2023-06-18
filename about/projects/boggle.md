@@ -28,4 +28,4 @@ project-url: "https://github.com/MatthiasValvekens/boggle/"
 
 A fairly basic Boggle clone with a Bulma-based user interface and a server running on top of Flask. Communication between client and server happens through a very simple JSON API.
 Goal: provide some responsible family entertainment during the coronavirus crisis.<br/>
-If you're up for it, give <a href="/boggle/">my hosted Boggle instance</a> a spin.
+This project is no longer actively maintained.
