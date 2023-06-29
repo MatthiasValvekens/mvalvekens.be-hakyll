@@ -38,13 +38,14 @@ jobs:
       with:
         name: website-content
         path: _site/
-    - name: Upload to server
-      uses: burnett01/rsync-deployments@5.2.1
+    - name: Upload to S3
+      uses: jakejarvis/s3-sync-action@master
       with:
-        switches: -avzr
-        path: _site/
-        remote_path: ${{ secrets.DEPLOY_PATH }}
-        remote_host: ${{ secrets.DEPLOY_HOST }}
-        remote_port: ${{ secrets.DEPLOY_PORT }}
-        remote_user: ${{ secrets.DEPLOY_USER }}
-        remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        args: --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        SOURCE_DIR: _site/
+        DEST_DIR: ${{ vars.S3_DEST_DIR }}
