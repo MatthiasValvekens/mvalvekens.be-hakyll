@@ -40,7 +40,7 @@ jobs:
       with:
         audience: ${{ vars.AWS_DEPLOY_AUDIENCE }}
         role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE }}
-        aws-region: ${{ vars.AWS_REGION }}
+        aws-region: ${{ vars.AWS_IAM_REGION }}
     - name: Download generated content
       uses: actions/download-artifact@v3
       with:
