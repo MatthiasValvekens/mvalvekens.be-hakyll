@@ -35,7 +35,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - name: Configure AWS Credentials with GHA OIDC for {{ github.ref }}
+    - name: Configure AWS Credentials with GHA OIDC
       uses: aws-actions/configure-aws-credentials@v2
       with:
         audience: ${{ vars.AWS_DEPLOY_AUDIENCE }}
