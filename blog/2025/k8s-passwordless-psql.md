@@ -9,8 +9,11 @@ license: "CC BY-SA 4.0 hybrid"
 # Background
 
 
-Managing secrets is hard to get right. Managing secrets for access to something as ubiquitous and mission-critical as a database server is _also_ hard.
+Secret management is hard to get right. When dealing with access to something as mission-critical as a database server, it's nothing to scoff at.
+Traditionally, the way you allow an application to connect to a database is by configuring it with the username and password for a database user.
+But passing around static, long-lived credentials for database users is cumbersome, error-prone and frankly dangerous.
 
+Figuring out how to streamline and de-risk this access control layer in a way that minimally impacts the applications themselves is an interesting platform engineering problem.
 The big cloud providers have an answer to this for their own managed services: they allow you to set up policy-based access to databases with credentials conjured up by the platform out of thin air. This largely removes the secrets management burden from developers and operators.
 
 That's all very nice. But what if you're not running on a big cloud provider's infra? Is it possible to get similar benefits using only FOSS tooling?
