@@ -1,6 +1,6 @@
-resolver: lts-20.19
+resolver: lts-24.34
 
 packages:
     - .
 extra-deps:
-    - hakyll-4.15.1.1
+    - hakyll-4.16.7.1
