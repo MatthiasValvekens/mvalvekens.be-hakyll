@@ -32,6 +32,20 @@
     font-style: italic;
 }
 
+.blog-paras > table {
+    border: 1px dotted #333333;
+    border-collapse: collapse;
+}
+
+.blog-paras thead th {
+    padding: 0.2rem;
+}
+
+.blog-paras tbody td {
+    padding: 0.2rem;
+}
+
+
 section.article-info {
     margin-bottom: 2rem;
     text-align: center;
