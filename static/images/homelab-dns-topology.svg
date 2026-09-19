@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="830"
+   height="785"
+   viewBox="0 0 830 785"
+   font-family="'DejaVu Sans Mono', Menlo, Consolas, monospace"
+   font-size="12"
+   version="1.1"
+   id="svg886"
+   sodipodi:docname="homelab-dns-topology.svg"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview888"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.1974952"
+     inkscape:cx="337.37087"
+     inkscape:cy="688.93804"
+     inkscape:window-width="1375"
+     inkscape:window-height="676"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg886" />
+  <title
+     id="title645">Homelab authoritative DNS: hidden primaries and secondaries</title>
+  <defs
+     id="defs658">
+    <marker
+       id="arr"
+       viewBox="0 0 10 10"
+       refX="9"
+       refY="5"
+       markerWidth="7"
+       markerHeight="7"
+       orient="auto-start-reverse">
+      <path
+         d="M 0,0 10,5 0,10 Z"
+         fill="#333333"
+         id="path647" />
+    </marker>
+    <marker
+       id="arr-int"
+       viewBox="0 0 10 10"
+       refX="9"
+       refY="5"
+       markerWidth="7"
+       markerHeight="7"
+       orient="auto-start-reverse">
+      <path
+         d="M0,0 L10,5 L0,10 z"
+         fill="#2f6690"
+         id="path650" />
+    </marker>
+    <marker
+       id="arr-pub"
+       viewBox="0 0 10 10"
+       refX="9"
+       refY="5"
+       markerWidth="7"
+       markerHeight="7"
+       orient="auto-start-reverse">
+      <path
+         d="M0,0 L10,5 L0,10 z"
+         fill="#a0522d"
+         id="path653" />
+    </marker>
+    <style
+       id="style656">
+      .band { fill: #f3f4f6; stroke: none; }
+      .band-label { font-size: 11px; font-weight: bold; fill: #666; letter-spacing: 0.5px; }
+      .band-sublabel { font-size: 10px; fill: #888; }
+      .box { fill: #fff; stroke: #333; stroke-width: 1.2; }
+      .box-offsite { fill: #fff; stroke: #333; stroke-width: 1.2; stroke-dasharray: 5 3; }
+      .title { font-size: 13px; font-weight: bold; fill: #111; }
+      .sub { font-size: 11px; fill: #555; }
+      .zone { font-size: 12px; fill: #111; }
+      .colhead { font-size: 11px; fill: #777; }
+      .exp { font-size: 11px; fill: #333; }
+      .div { stroke: #ccc; stroke-width: 1; }
+      .flow { stroke: #333; stroke-width: 1.4; fill: none; }
+      .flow-int { stroke: #2f6690; stroke-width: 1.8; fill: none; }
+      .flow-pub { stroke: #a0522d; stroke-width: 1.8; fill: none; }
+      .halo { stroke: #fff; stroke-width: 7; fill: none; }
+      .buslabel-int { font-size: 11px; fill: #2f6690; }
+      .buslabel-pub { font-size: 11px; fill: #a0522d; }
+      .note { font-size: 11px; fill: #777; }
+    </style>
+  </defs>
+  <rect
+     width="830"
+     height="785"
+     fill="#fff"
+     id="rect660" />
+  <!-- bands -->
+  <rect
+     class="band"
+     x="4"
+     y="8"
+     width="822"
+     height="92"
+     rx="6"
+     id="rect662" />
+  <text
+     class="band-label"
+     text-anchor="middle"
+     transform="translate(25,54) rotate(-90)"
+     id="text664">WRITERS</text>
+  <rect
+     class="band"
+     x="4"
+     y="110"
+     width="822"
+     height="222"
+     rx="6"
+     id="rect666" />
+  <text
+     class="band-label"
+     text-anchor="middle"
+     transform="translate(21,221) rotate(-90)"
+     id="text668">HIDDEN PRIMARIES</text>
+  <text
+     class="band-sublabel"
+     text-anchor="middle"
+     transform="translate(35,221) rotate(-90)"
+     id="text670">PowerDNS + DNSSEC</text>
+  <rect
+     class="band"
+     x="4"
+     y="392"
+     width="822"
+     height="252"
+     rx="6"
+     id="rect672" />
+  <text
+     class="band-label"
+     text-anchor="middle"
+     transform="translate(21,518) rotate(-90)"
+     id="text674">SECONDARIES</text>
+  <text
+     class="band-sublabel"
+     text-anchor="middle"
+     transform="translate(35,518) rotate(-90)"
+     id="text676">bind</text>
+  <rect
+     class="band"
+     x="4"
+     y="654"
+     width="822"
+     height="92"
+     rx="6"
+     id="rect678" />
+  <text
+     class="band-label"
+     text-anchor="middle"
+     transform="translate(25,700) rotate(-90)"
+     id="text680">CONSUMERS</text>
+  <g
+     transform="translate(30,0)"
+     id="g884">
+    <!-- ── Band A: writers ─────────────────────────────────────────── -->
+    <rect
+       class="box"
+       x="20"
+       y="38"
+       width="240"
+       height="46"
+       rx="4"
+       id="rect682" />
+    <text
+       class="title"
+       x="32"
+       y="57"
+       id="text684">GitOps config</text>
+    <text
+       class="sub"
+       x="32"
+       y="74"
+       id="text686">static records, delegations</text>
+    <rect
+       class="box"
+       x="280"
+       y="38"
+       width="240"
+       height="46"
+       rx="4"
+       id="rect688" />
+    <text
+       class="title"
+       x="292"
+       y="57"
+       id="text690">router / DHCP</text>
+    <text
+       class="sub"
+       x="292"
+       y="74"
+       id="text692">RFC 2136 updates</text>
+    <rect
+       class="box"
+       x="540"
+       y="38"
+       width="240"
+       height="46"
+       rx="4"
+       id="rect694" />
+    <text
+       class="title"
+       x="552"
+       y="57"
+       id="text696">ACME clients</text>
+    <text
+       class="sub"
+       x="552"
+       y="74"
+       id="text698">RFC 2136 TXT updates</text>
+    <line
+       class="flow"
+       x1="140"
+       y1="84"
+       x2="140"
+       y2="158"
+       marker-end="url(#arr)"
+       id="line700" />
+    <line
+       class="flow"
+       x1="400"
+       y1="84"
+       x2="400"
+       y2="158"
+       marker-end="url(#arr)"
+       id="line702" />
+    <line
+       class="flow"
+       x1="660"
+       y1="84"
+       x2="660"
+       y2="158"
+       marker-end="url(#arr)"
+       id="line704" />
+    <!-- ── Band B: hidden primaries ────────────────────────────────── -->
+    <!-- powerdns -->
+    <rect
+       class="box"
+       x="20"
+       y="160"
+       width="240"
+       height="156"
+       rx="4"
+       id="rect706" />
+    <text
+       class="title"
+       x="32"
+       y="180"
+       id="text708">powerdns</text>
+    <text
+       class="sub"
+       x="32"
+       y="196"
+       id="text710">static zones</text>
+    <line
+       class="div"
+       x1="20"
+       y1="206"
+       x2="260"
+       y2="206"
+       id="line712" />
+    <line
+       class="div"
+       x1="140"
+       y1="206"
+       x2="140"
+       y2="286"
+       id="line714" />
+    <text
+       class="colhead"
+       x="32"
+       y="224"
+       id="text716">internal</text>
+    <text
+       class="colhead"
+       x="152"
+       y="224"
+       id="text718">public</text>
+    <text
+       class="zone"
+       x="32"
+       y="242"
+       id="text720">k8s.lab</text>
+    <text
+       class="zone"
+       x="32"
+       y="258"
+       id="text722">svc.lab</text>
+    <text
+       class="zone"
+       x="32"
+       y="274"
+       id="text724">mgmt.lab</text>
+    <text
+       class="zone"
+       x="152"
+       y="242"
+       id="text726">lab</text>
+    <text
+       class="zone"
+       x="152"
+       y="258"
+       id="text728">pub.lab</text>
+    <line
+       class="div"
+       x1="20"
+       y1="286"
+       x2="260"
+       y2="286"
+       id="line730" />
+    <text
+       class="exp"
+       x="32"
+       y="305"
+       id="text732">open to: secondaries only</text>
+    <!-- powerdns-dyn -->
+    <rect
+       class="box"
+       x="280"
+       y="160"
+       width="240"
+       height="156"
+       rx="4"
+       id="rect734" />
+    <text
+       class="title"
+       x="292"
+       y="180"
+       id="text736">powerdns-dyn</text>
+    <text
+       class="sub"
+       x="292"
+       y="196"
+       id="text738">dynamic hosts</text>
+    <line
+       class="div"
+       x1="280"
+       y1="206"
+       x2="520"
+       y2="206"
+       id="line740" />
+    <line
+       class="div"
+       x1="400"
+       y1="206"
+       x2="400"
+       y2="286"
+       id="line742" />
+    <text
+       class="colhead"
+       x="292"
+       y="224"
+       id="text744">internal</text>
+    <text
+       class="colhead"
+       x="412"
+       y="224"
+       id="text746">public</text>
+    <text
+       class="zone"
+       x="292"
+       y="242"
+       id="text748">devices.lab</text>
+    <text
+       class="zone"
+       x="412"
+       y="242"
+       id="text752">dyn.pub.lab</text>
+    <line
+       class="div"
+       x1="280"
+       y1="286"
+       x2="520"
+       y2="286"
+       id="line754" />
+    <text
+       class="exp"
+       x="292"
+       y="305"
+       id="text756">open to: + network gear</text>
+    <!-- powerdns-acme -->
+    <rect
+       class="box"
+       x="540"
+       y="160"
+       width="240"
+       height="156"
+       rx="4"
+       id="rect758" />
+    <text
+       class="title"
+       x="552"
+       y="180"
+       id="text760">powerdns-acme</text>
+    <text
+       class="sub"
+       x="552"
+       y="196"
+       id="text762">ACME challenges</text>
+    <line
+       class="div"
+       x1="540"
+       y1="206"
+       x2="780"
+       y2="206"
+       id="line764" />
+    <line
+       class="div"
+       x1="660"
+       y1="206"
+       x2="660"
+       y2="286"
+       id="line766" />
+    <text
+       class="colhead"
+       x="552"
+       y="224"
+       id="text768">internal</text>
+    <text
+       class="colhead"
+       x="672"
+       y="224"
+       id="text770">public</text>
+    <text
+       class="zone"
+       x="552"
+       y="242"
+       id="text772">acme.lab</text>
+    <text
+       class="zone"
+       x="672"
+       y="242"
+       id="text774">acme.pub.lab</text>
+    <line
+       class="div"
+       x1="540"
+       y1="286"
+       x2="780"
+       y2="286"
+       id="line776" />
+    <text
+       class="exp"
+       x="552"
+       y="305"
+       id="text778">open to: + most of the lab</text>
+    <!-- ── Zone transfer buses ─────────────────────────────────────── -->
+    <!-- internal: drops from the left half of each primary -->
+    <line
+       class="flow-int"
+       x1="80"
+       y1="316"
+       x2="80"
+       y2="352"
+       id="line780" />
+    <line
+       class="flow-int"
+       x1="340"
+       y1="316"
+       x2="340"
+       y2="352"
+       id="line782" />
+    <line
+       class="flow-int"
+       x1="600"
+       y1="316"
+       x2="600"
+       y2="352"
+       id="line784" />
+    <line
+       class="flow-int"
+       x1="80"
+       y1="352"
+       x2="600"
+       y2="352"
+       id="line786" />
+    <text
+       class="buslabel-int"
+       x="212"
+       y="346"
+       id="text788">internal zones</text>
+    <!-- public: drops from the right half of each primary (passing over the internal bus) -->
+    <line
+       class="halo"
+       x1="200"
+       y1="340"
+       x2="200"
+       y2="364"
+       id="line790" />
+    <line
+       class="halo"
+       x1="460"
+       y1="340"
+       x2="460"
+       y2="364"
+       id="line792" />
+    <line
+       class="flow-pub"
+       x1="200"
+       y1="316"
+       x2="200"
+       y2="374"
+       id="line794" />
+    <line
+       class="flow-pub"
+       x1="460"
+       y1="316"
+       x2="460"
+       y2="374"
+       id="line796" />
+    <line
+       class="flow-pub"
+       x1="720"
+       y1="316"
+       x2="720"
+       y2="374"
+       id="line798" />
+    <line
+       class="flow-pub"
+       x1="200"
+       y1="374"
+       x2="720"
+       y2="374"
+       id="line800" />
+    <text
+       class="buslabel-pub"
+       x="476"
+       y="368"
+       id="text802">public zones</text>
+    <line
+       class="flow-int"
+       x1="140"
+       y1="352"
+       x2="140"
+       y2="438"
+       marker-end="url(#arr-int)"
+       id="line804" />
+    <line
+       class="flow-pub"
+       x1="410"
+       y1="374"
+       x2="410"
+       y2="438"
+       marker-end="url(#arr-pub)"
+       id="line806" />
+    <line
+       class="flow-pub"
+       x1="670"
+       y1="374"
+       x2="670"
+       y2="438"
+       marker-end="url(#arr-pub)"
+       id="line808" />
+    <!-- ── Band C: secondaries ─────────────────────────────────────── -->
+    <rect
+       class="box"
+       x="20"
+       y="440"
+       width="240"
+       height="122"
+       rx="4"
+       id="rect810" />
+    <text
+       class="sub"
+       x="32"
+       y="458"
+       id="text812">internal secondaries</text>
+    <rect
+       class="box"
+       x="32"
+       y="468"
+       width="102"
+       height="48"
+       rx="3"
+       id="rect814" />
+    <text
+       class="title"
+       x="42"
+       y="487"
+       id="text816">lothlorien</text>
+    <text
+       class="sub"
+       x="42"
+       y="505"
+       id="text818">in k8s</text>
+    <rect
+       class="box-offsite"
+       x="146"
+       y="468"
+       width="102"
+       height="48"
+       rx="3"
+       id="rect820" />
+    <text
+       class="title"
+       x="156"
+       y="487"
+       id="text822">galadriel</text>
+    <text
+       class="sub"
+       x="156"
+       y="505"
+       id="text824">outside k8s</text>
+    <line
+       class="div"
+       x1="20"
+       y1="530"
+       x2="260"
+       y2="530"
+       id="line826" />
+    <text
+       class="exp"
+       x="32"
+       y="549"
+       id="text828">open to: lab network (IPv6)</text>
+    <rect
+       class="box"
+       x="290"
+       y="440"
+       width="240"
+       height="80"
+       rx="4"
+       id="rect830" />
+    <text
+       class="title"
+       x="302"
+       y="460"
+       id="text832">rivendell</text>
+    <text
+       class="sub"
+       x="302"
+       y="477"
+       id="text834">public secondary</text>
+    <line
+       class="div"
+       x1="290"
+       y1="489"
+       x2="530"
+       y2="489"
+       id="line836" />
+    <text
+       class="exp"
+       x="302"
+       y="508"
+       id="text838">open to: internet (IPv6)</text>
+    <rect
+       class="box"
+       x="560"
+       y="440"
+       width="220"
+       height="80"
+       rx="4"
+       id="rect840" />
+    <text
+       class="title"
+       x="572"
+       y="460"
+       id="text842">imladris</text>
+    <text
+       class="sub"
+       x="572"
+       y="477"
+       id="text844">relay to off-site outpost</text>
+    <line
+       class="div"
+       x1="560"
+       y1="489"
+       x2="780"
+       y2="489"
+       id="line846" />
+    <text
+       class="exp"
+       x="572"
+       y="508"
+       id="text848">open to: outpost only</text>
+    <line
+       class="flow-pub"
+       x1="670"
+       y1="520"
+       x2="670"
+       y2="544"
+       marker-end="url(#arr-pub)"
+       id="line850" />
+    <rect
+       class="box-offsite"
+       x="560"
+       y="546"
+       width="220"
+       height="80"
+       rx="4"
+       id="rect852" />
+    <text
+       class="title"
+       x="572"
+       y="566"
+       id="text854">VPS outpost</text>
+    <text
+       class="sub"
+       x="572"
+       y="583"
+       id="text856">off-site public secondary</text>
+    <line
+       class="div"
+       x1="560"
+       y1="595"
+       x2="780"
+       y2="595"
+       id="line858" />
+    <text
+       class="exp"
+       x="572"
+       y="614"
+       id="text860">open to: internet (IPv4 + IPv6)</text>
+    <!-- ── Band D: consumers ───────────────────────────────────────── -->
+    <line
+       class="flow"
+       x1="140"
+       y1="562"
+       x2="140"
+       y2="684"
+       marker-end="url(#arr)"
+       id="line862" />
+    <line
+       class="flow"
+       x1="410"
+       y1="520"
+       x2="410"
+       y2="684"
+       marker-end="url(#arr)"
+       id="line864" />
+    <line
+       class="flow"
+       x1="670"
+       y1="626"
+       x2="670"
+       y2="684"
+       marker-end="url(#arr)"
+       id="line866" />
+    <rect
+       class="box"
+       x="20"
+       y="686"
+       width="240"
+       height="46"
+       rx="4"
+       id="rect868" />
+    <text
+       class="title"
+       x="32"
+       y="705"
+       id="text870">lab resolvers</text>
+    <text
+       class="sub"
+       x="32"
+       y="722"
+       id="text872">clients on the home network</text>
+    <rect
+       class="box"
+       x="290"
+       y="686"
+       width="490"
+       height="46"
+       rx="4"
+       id="rect874" />
+    <text
+       class="title"
+       x="302"
+       y="705"
+       id="text876">internet resolvers</text>
+    <text
+       class="sub"
+       x="302"
+       y="722"
+       id="text878">anyone, including ACME CAs checking DNS-01 challenges</text>
+    <text
+       class="note"
+       x="0"
+       y="763"
+       id="text880">arrows show data flow · dashed border: runs outside Kubernetes</text>
+    <text
+       class="note"
+       x="0"
+       y="778"
+       id="text882">zone transfers: NOTIFY + AXFR, TSIG-authenticated · zone names relative to mvalvekens.be</text>
+  </g>
+</svg>
