@@ -22,7 +22,7 @@ jobs:
               echo envname=staging >> "$GITHUB_OUTPUT"
           fi
   build-content:
-    uses: MatthiasValvekens/gha-hakyll-build/.github/workflows/build-website.yml@v2
+    uses: MatthiasValvekens/gha-hakyll-build/.github/workflows/build-website.yml@v4
     permissions:
       contents: read
       packages: read
